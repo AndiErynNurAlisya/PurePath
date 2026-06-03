@@ -17,7 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PurePath">
 
-        <!-- Splash Activity sebagai Launcher -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -27,9 +26,20 @@
             </intent-filter>
         </activity>
 
-        <!-- Main Activity yang baru dibuat -->
         <activity
             android:name=".activity.MainActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.LoginActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.OnboardingActivity"
             android:exported="false" />
 
     </application>
