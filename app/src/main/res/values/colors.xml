@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Warna Utama PurePath -->
+    <color name="navy">#03045E</color>
+    <color name="ocean">#0077B6</color>
+    <color name="cyan">#00B4D8</color>
+    <color name="sky">#90E0EF</color>
+    <color name="ice">#CAF0F8</color>
+
+    <!-- Warna Status AQI & UV -->
+    <color name="aqi_good">#52B788</color>
+    <color name="aqi_moderate">#FFB703</color>
+    <color name="aqi_sensitive">#F4845F</color>
+    <color name="aqi_unhealthy">#E63946</color>
+    <color name="aqi_hazardous">#9B2226</color>
+
+    <!-- Warna Teks -->
+    <color name="text_primary_dark">#CAF0F8</color>
+    <color name="text_secondary_dark">#90E0EF</color>
+    <color name="text_primary_light">#03045E</color>
+    <color name="text_secondary_light">#0077B6</color>
+    <color name="text_hint">#90A4AE</color>
+
+    <!-- Warna Background -->
+    <color name="bg_light">#F0F8FF</color>
+    <color name="bg_dark">#03045E</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="surface_dark">#071A4A</color>
+
+    <!-- Warna Bottom Nav -->
+    <color name="bottom_nav_light">#FFFFFF</color>
+    <color name="bottom_nav_dark">#03045E</color>
+
+    <!-- Warna Putih & Hitam -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+</resources>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.purepath.fragment.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/exploreFragment"
+        android:name="com.example.purepath.fragment.ExploreFragment"
+        android:label="Explore"
+        tools:layout="@layout/fragment_explore" />
+
+    <fragment
+        android:id="@+id/diaryFragment"
+        android:name="com.example.purepath.fragment.DiaryFragment"
+        android:label="Diary"
+        tools:layout="@layout/fragment_diary" />
+
+    <fragment
+        android:id="@+id/bookmarkFragment"
+        android:name="com.example.purepath.fragment.BookmarkFragment"
+        android:label="Bookmark"
+        tools:layout="@layout/fragment_bookmark" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.purepath.fragment.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/detailLocationFragment"
+        android:name="com.example.purepath.fragment.DetailLocationFragment"
+        android:label="Detail Location"
+        tools:layout="@layout/fragment_detail_location">
+        <argument
+            android:name="locationId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailPlanFragment"
+        android:name="com.example.purepath.fragment.DetailPlanFragment"
+        android:label="Detail Plan"
+        tools:layout="@layout/fragment_detail_plan">
+        <argument
+            android:name="planId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+
+</navigation>

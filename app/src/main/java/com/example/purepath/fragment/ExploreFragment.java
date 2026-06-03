@@ -1,0 +1,74 @@
+package com.example.purepath.fragment;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.example.purepath.R;
+import com.example.purepath.adapter.LocationAdapter;
+import com.example.purepath.model.Location;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ExploreFragment extends Fragment {
+
+    private RecyclerView rvLocations;
+    private LocationAdapter adapter;
+    private SwipeRefreshLayout swipeRefresh;
+    private List<Location> locationList = new ArrayList<>();
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_explore, container, false);
+
+        rvLocations = view.findViewById(R.id.rv_locations);
+        swipeRefresh = view.findViewById(R.id.swipe_refresh);
+
+        setupRecyclerView();
+        loadDummyData();
+
+        swipeRefresh.setOnRefreshListener(() -> {
+            loadDummyData();
+            swipeRefresh.setRefreshing(false);
+        });
+
+        return view;
+    }
+
+    private void setupRecyclerView() {
+        adapter = new LocationAdapter(getContext(), locationList, new LocationAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Location location) {
+                // nanti navigasi ke DetailLocationFragment
+            }
+
+            @Override
+            public void onBookmarkClick(Location location, int position) {
+                location.setBookmarked(!location.isBookmarked());
+                adapter.notifyItemChanged(position);
+            }
+        });
+
+        rvLocations.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvLocations.setAdapter(adapter);
+    }
+
+    private void loadDummyData() {
+        locationList.clear();
+        locationList.add(new Location("Jakarta Pusat", "DKI Jakarta, Indonesia", 78, "Sedang", false));
+        locationList.add(new Location("Bandung", "Jawa Barat, Indonesia", 32, "Baik", true));
+        locationList.add(new Location("Surabaya", "Jawa Timur, Indonesia", 154, "Tidak Sehat", false));
+        locationList.add(new Location("Yogyakarta", "DI Yogyakarta, Indonesia", 62, "Sedang", false));
+        locationList.add(new Location("Medan", "Sumatera Utara, Indonesia", 45, "Baik", false));
+        adapter.notifyDataSetChanged();
+    }
+}

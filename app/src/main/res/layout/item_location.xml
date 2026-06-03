@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_location"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="12dp">
+
+        <!-- Colored Left Border -->
+        <View
+            android:id="@+id/view_aqi_color"
+            android:layout_width="4dp"
+            android:layout_height="48dp"
+            android:background="@color/aqi_moderate"
+            android:layout_marginEnd="12dp"/>
+
+        <!-- City Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_city_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jakarta Pusat"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"/>
+
+            <TextView
+                android:id="@+id/tv_province"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DKI Jakarta, Indonesia"
+                android:textSize="12sp"
+                android:textColor="?attr/colorSecondary"/>
+
+        </LinearLayout>
+
+        <!-- AQI Badge -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginEnd="12dp">
+
+            <TextView
+                android:id="@+id/tv_aqi_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="78 AQI"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/aqi_moderate"
+                android:background="@android:color/transparent"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"/>
+
+            <TextView
+                android:id="@+id/tv_aqi_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sedang"
+                android:textSize="11sp"
+                android:textColor="?attr/colorSecondary"/>
+
+        </LinearLayout>
+
+        <!-- Bookmark -->
+        <ImageView
+            android:id="@+id/iv_bookmark"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_bookmark"
+            android:tint="?attr/colorSecondary"/>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
