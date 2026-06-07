@@ -1,5 +1,6 @@
 package com.example.purepath.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,8 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import com.example.purepath.R;
+import com.example.purepath.activity.LoginActivity;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingsFragment extends Fragment {
@@ -90,8 +91,21 @@ public class SettingsFragment extends Fragment {
 
         // Logout
         btnLogout.setOnClickListener(v -> {
-            prefs.edit().clear().apply();
-            // nanti arahkan ke LoginActivity
+            // Ubah is_logged_in menjadi false alih-alih clear() semua data (agar akun tetap ada)
+            prefs.edit()
+                    .putBoolean("is_logged_in", false)
+                    .apply();
+
+            // Pindah ke LoginActivity
+            Intent intent = new Intent(requireActivity(), LoginActivity.class);
+            
+            // Hapus stack activity agar user tidak bisa kembali (Back) ke halaman ini
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            
+            startActivity(intent);
+            
+            // Tutup activity saat ini (MainActivity)
+            requireActivity().finish();
         });
 
         return view;

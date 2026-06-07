@@ -15,6 +15,7 @@ import com.example.purepath.network.AirPollutionResponse;
 import com.example.purepath.network.ApiClient;
 import com.example.purepath.network.MeteoResponse;
 import com.example.purepath.network.WeatherResponse;
+import com.example.purepath.database.DiaryDao;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import retrofit2.Call;
@@ -96,9 +97,9 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onResponse(@NonNull Call<WeatherResponse> call,
                                        @NonNull Response<WeatherResponse> response) {
-                    if (response.isSuccessful() && response.body() != null) {
+                    if (response.isSuccessful() && response.body() != null && isAdded()) {
                         WeatherResponse data = response.body();
-                        requireActivity().runOnUiThread(() -> {
+                        getActivity().runOnUiThread(() -> {
                             tvTemp.setText((int) data.main.temp + "°C");
                             tvHumidity.setText(data.main.humidity + "%");
                             tvWind.setText((int) data.wind.speed + " km/h");
@@ -113,8 +114,10 @@ public class HomeFragment extends Fragment {
 
                 @Override
                 public void onFailure(@NonNull Call<WeatherResponse> call, @NonNull Throwable t) {
-                    requireActivity().runOnUiThread(() ->
-                            tvWeatherDesc.setText("Gagal memuat data"));
+                    if (isAdded()) {
+                        getActivity().runOnUiThread(() ->
+                                tvWeatherDesc.setText("Gagal memuat data"));
+                    }
                 }
             });
         });
@@ -128,28 +131,30 @@ public class HomeFragment extends Fragment {
             public void onResponse(@NonNull Call<AirPollutionResponse> call,
                                    @NonNull Response<AirPollutionResponse> response) {
                 if (response.isSuccessful() && response.body() != null
-                        && !response.body().list.isEmpty()) {
+                        && !response.body().list.isEmpty() && isAdded()) {
+
                     AirPollutionResponse.AqiData data = response.body().list.get(0);
                     currentAqi = data.main.aqi;
-
-                    // Convert OWM AQI (1-5) ke skala 0-300
                     int aqiDisplay = convertOwmAqi(currentAqi);
                     double pm25 = data.components.pm25;
 
-                    requireActivity().runOnUiThread(() -> {
+                    getActivity().runOnUiThread(() -> {
                         tvAqiValue.setText(String.valueOf(aqiDisplay));
                         updateAqiUI(currentAqi, pm25);
                         updateBreathIndex(currentAqi);
                         updateRekomendasi(currentAqi, currentUv);
+
+                        // Simpan ke database setelah data AQI didapat
+                        saveToDiary();
                     });
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<AirPollutionResponse> call,
-                                  @NonNull Throwable t) {
-                requireActivity().runOnUiThread(() ->
-                        tvAqiLabel.setText("Gagal memuat"));
+            public void onFailure(@NonNull Call<AirPollutionResponse> call, @NonNull Throwable t) {
+                if (isAdded()) {
+                    getActivity().runOnUiThread(() -> tvAqiLabel.setText("Gagal memuat"));
+                }
             }
         });
     }
@@ -161,22 +166,40 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<MeteoResponse> call,
                                    @NonNull Response<MeteoResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null && isAdded()) {
                     currentUv = response.body().current.uvIndex;
-                    requireActivity().runOnUiThread(() -> {
+                    getActivity().runOnUiThread(() -> {
                         String uvLabel = getUvLabel(currentUv);
                         tvUv.setText((int) currentUv + " (" + uvLabel + ")");
                         updateRekomendasi(currentAqi, currentUv);
+
+                        // Update database dengan nilai UV terbaru
+                        saveToDiary();
                     });
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<MeteoResponse> call,
-                                  @NonNull Throwable t) {
-                requireActivity().runOnUiThread(() -> tvUv.setText("N/A"));
+            public void onFailure(@NonNull Call<MeteoResponse> call, @NonNull Throwable t) {
+                if (isAdded()) {
+                    getActivity().runOnUiThread(() -> tvUv.setText("N/A"));
+                }
             }
         });
+    }
+
+    // Fungsi helper untuk menyimpan data ke SQLite
+    private void saveToDiary() {
+        if (!isAdded()) return;
+
+        String today = new java.text.SimpleDateFormat("EEEE, dd MMM",
+                new java.util.Locale("id")).format(new java.util.Date());
+
+        String aqiLabel = getAqiLabel(currentAqi);
+        String desc = getAqiDesc(currentAqi);
+
+        DiaryDao dao = new DiaryDao(requireContext());
+        dao.insertOrUpdate(today, convertOwmAqi(currentAqi), aqiLabel, desc, 0, currentUv);
     }
 
     private int convertOwmAqi(int owmAqi) {
@@ -187,6 +210,26 @@ public class HomeFragment extends Fragment {
             case 4: return 175;
             case 5: return 250;
             default: return 0;
+        }
+    }
+
+    private String getAqiLabel(int owmAqi) {
+        switch (owmAqi) {
+            case 1: return "BAIK";
+            case 2: return "SEDANG";
+            case 3: return "TIDAK SEHAT";
+            case 4: return "BURUK";
+            default: return "BERBAHAYA";
+        }
+    }
+
+    private String getAqiDesc(int owmAqi) {
+        switch (owmAqi) {
+            case 1: return "Udara Segar Sepanjang Hari";
+            case 2: return "Kualitas Udara Cukup Baik";
+            case 3: return "Sensitif Terhadap Polusi";
+            case 4: return "Polusi Tinggi Hari Ini";
+            default: return "Kondisi Udara Berbahaya";
         }
     }
 
@@ -244,9 +287,16 @@ public class HomeFragment extends Fragment {
         boolean anyCondition = hasAsma || hasIspa || hasLupus || hasEksim || hasRosacea || hasHerpes;
 
         if (!anyCondition) {
-            if (aqi <= 1) { tvRekoTitle.setText("Udara Bersih Hari Ini"); tvRekoDesc.setText("Kualitas udara sangat baik. Aman untuk semua aktivitas."); }
-            else if (aqi <= 2) { tvRekoTitle.setText("Udara Cukup Baik"); tvRekoDesc.setText("Aktivitas luar ruangan tetap aman hari ini."); }
-            else { tvRekoTitle.setText("Waspada Kualitas Udara"); tvRekoDesc.setText("Pertimbangkan mengurangi aktivitas luar ruangan."); }
+            if (aqi <= 1) {
+                tvRekoTitle.setText("Udara Bersih Hari Ini");
+                tvRekoDesc.setText("Kualitas udara sangat baik. Aman untuk semua aktivitas.");
+            } else if (aqi <= 2) {
+                tvRekoTitle.setText("Udara Cukup Baik");
+                tvRekoDesc.setText("Aktivitas luar ruangan tetap aman hari ini.");
+            } else {
+                tvRekoTitle.setText("Waspada Kualitas Udara");
+                tvRekoDesc.setText("Pertimbangkan mengurangi aktivitas luar ruangan.");
+            }
             return;
         }
 

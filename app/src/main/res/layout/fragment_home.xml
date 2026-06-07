@@ -85,7 +85,7 @@
                     android:id="@+id/tv_aqi_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
+                    android:text="-"
                     android:textSize="48sp"
                     android:textStyle="bold"
                     android:textColor="@color/aqi_good"/>
@@ -94,7 +94,7 @@
                     android:id="@+id/tv_aqi_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Baik"
+                    android:text="Null"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/aqi_good"
@@ -142,7 +142,7 @@
                         android:id="@+id/tv_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="28°C"
+                        android:text="-°C"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="?attr/colorOnSurface"/>
@@ -151,7 +151,7 @@
                         android:id="@+id/tv_weather_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cerah Berawan"
+                        android:text="Null"
                         android:textSize="11sp"
                         android:textColor="?attr/colorSecondary"/>
                 </LinearLayout>
@@ -180,7 +180,7 @@
                         android:id="@+id/tv_humidity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="65%"
+                        android:text="-%"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="?attr/colorOnSurface"/>
@@ -226,7 +226,7 @@
                         android:id="@+id/tv_wind"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="12 km/h"
+                        android:text="- km/h"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="?attr/colorOnSurface"/>
@@ -262,7 +262,7 @@
                         android:id="@+id/tv_uv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3 (Moderat)"
+                        android:text="-"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="@color/aqi_moderate"/>
@@ -310,7 +310,7 @@
                         android:id="@+id/tv_breath_index"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="94"
+                        android:text="--"
                         android:textSize="40sp"
                         android:textStyle="bold"
                         android:textColor="?attr/colorPrimary"/>
@@ -385,7 +385,7 @@
                     android:id="@+id/tv_reko_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Berdasarkan profil asma Anda, tingkat polutan saat ini sangat aman."
+                    android:text="Berdasarkan profil kesehatan Anda, tingkat polutan saat ini sangat aman."
                     android:textSize="13sp"
                     android:textColor="@color/sky"
                     android:layout_marginBottom="16dp"/>
@@ -400,74 +400,5 @@
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-
-        <!-- Quick Actions -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="@style/PurePath.Card"
-                android:layout_marginEnd="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="😷"
-                        android:textSize="28sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Status Filter"
-                        android:textSize="12sp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_marginTop="4dp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="@style/PurePath.Card">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🕐"
-                        android:textSize="28sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Riwayat 24 Jam"
-                        android:textSize="12sp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_marginTop="4dp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
-
     </LinearLayout>
 </ScrollView>

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.purepath.R;
 import com.example.purepath.adapter.DiaryAdapter;
+import com.example.purepath.database.DiaryDao;
 import com.example.purepath.model.DiaryEntry;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -88,17 +89,15 @@ public class DiaryFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        List<DiaryEntry> diaryList = new ArrayList<>();
-        diaryList.add(new DiaryEntry("Minggu, 26 Mei", "Udara Segar Sepanjang Hari", 24, "BAIK"));
-        diaryList.add(new DiaryEntry("Sabtu, 25 Mei", "Kualitas Udara Optimal", 31, "BAIK"));
-        diaryList.add(new DiaryEntry("Jumat, 24 Mei", "Polusi Kendaraan Meningkat", 152, "BURUK"));
-        diaryList.add(new DiaryEntry("Kamis, 23 Mei", "Udara Cukup Bersih", 48, "BAIK"));
-        diaryList.add(new DiaryEntry("Rabu, 22 Mei", "Sensitifitas Udara Sedang", 82, "SEDANG"));
+        DiaryDao dao = new DiaryDao(requireContext());
+        List<DiaryEntry> diaryList = dao.getAllEntries();
 
-        adapter = new DiaryAdapter(getContext(), diaryList, entry -> {
-            // nanti navigasi ke detail
-        });
+        if (diaryList.isEmpty()) {
+            // Tampilkan dummy kalau belum ada data
+            diaryList.add(new DiaryEntry("Hari ini", "Belum ada data tercatat", 0, "N/A"));
+        }
 
+        adapter = new DiaryAdapter(getContext(), diaryList, entry -> {});
         rvDiary.setLayoutManager(new LinearLayoutManager(getContext()));
         rvDiary.setAdapter(adapter);
     }
