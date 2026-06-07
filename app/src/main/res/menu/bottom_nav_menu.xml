@@ -17,11 +17,6 @@
         android:title="Diary" />
 
     <item
-        android:id="@+id/bookmarkFragment"
-        android:icon="@drawable/ic_bookmark"
-        android:title="Bookmark" />
-
-    <item
         android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_settings"
         android:title="Settings" />

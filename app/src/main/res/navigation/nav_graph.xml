@@ -28,12 +28,6 @@
         tools:layout="@layout/fragment_diary" />
 
     <fragment
-        android:id="@+id/bookmarkFragment"
-        android:name="com.example.purepath.fragment.BookmarkFragment"
-        android:label="Bookmark"
-        tools:layout="@layout/fragment_bookmark" />
-
-    <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.purepath.fragment.SettingsFragment"
         android:label="Settings"

@@ -87,7 +87,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_bookmark"
-            android:tint="?attr/colorSecondary"/>
+            app:tint="?attr/colorSecondary" />
 
     </LinearLayout>
 

@@ -41,28 +41,7 @@
                     android:textStyle="bold"
                     android:textColor="?attr/colorOnSurface"/>
 
-                <TextView
-                    android:id="@+id/tv_last_updated"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Last updated: 5 mins ago"
-                    android:textSize="11sp"
-                    android:textColor="?attr/colorSecondary"/>
-
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/btn_share"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/ic_explore"
-                android:layout_marginEnd="8dp"/>
-
-            <ImageView
-                android:id="@+id/btn_bookmark"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/ic_bookmark"/>
 
         </LinearLayout>
 
@@ -229,12 +208,13 @@
                             android:orientation="vertical"
                             android:padding="10dp">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="CO" android:textSize="11sp" android:textColor="?attr/colorSecondary"/>
-                            <TextView android:id="@+id/tv_co" android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" android:text="0.8 μg/m³"
-                                android:textSize="14sp" android:textStyle="bold" android:textColor="@color/aqi_good"/>
+                                android:text="O3" android:textSize="11sp" android:textColor="?attr/colorSecondary"/>
+                            <TextView android:id="@+id/tv_o3" android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" android:text="54.3 μg/m³"
+                                android:textSize="14sp" android:textStyle="bold" android:textColor="@color/aqi_moderate"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
+
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
@@ -252,53 +232,6 @@
                             <TextView android:id="@+id/tv_no2" android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" android:text="15.2 μg/m³"
                                 android:textSize="14sp" android:textStyle="bold" android:textColor="@color/aqi_moderate"/>
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                </LinearLayout>
-
-                <!-- Row 3 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:cardCornerRadius="8dp"
-                        app:cardBackgroundColor="@color/ice"
-                        android:layout_marginEnd="8dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="10dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="O3" android:textSize="11sp" android:textColor="?attr/colorSecondary"/>
-                            <TextView android:id="@+id/tv_o3" android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" android:text="54.3 μg/m³"
-                                android:textSize="14sp" android:textStyle="bold" android:textColor="@color/aqi_moderate"/>
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:cardCornerRadius="8dp"
-                        app:cardBackgroundColor="@color/ice">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="10dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="SO2" android:textSize="11sp" android:textColor="?attr/colorSecondary"/>
-                            <TextView android:id="@+id/tv_so2" android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" android:text="4.7 μg/m³"
-                                android:textSize="14sp" android:textStyle="bold" android:textColor="@color/aqi_good"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -366,15 +299,6 @@
                             android:text="💨 Wind" android:textSize="11sp" android:textColor="?attr/colorSecondary"/>
                         <TextView android:id="@+id/tv_wind" android:layout_width="wrap_content"
                             android:layout_height="wrap_content" android:text="12 km/h NE"
-                            android:textSize="15sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface"/>
-                    </LinearLayout>
-
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                        android:layout_weight="1" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="👁️ Visibility" android:textSize="11sp" android:textColor="?attr/colorSecondary"/>
-                        <TextView android:id="@+id/tv_visibility" android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" android:text="8.0 km"
                             android:textSize="15sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
 

@@ -15,12 +15,6 @@
         android:gravity="center_vertical">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="📍"
-            android:textSize="16sp"/>
-
-        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -29,12 +23,6 @@
             android:textStyle="bold"
             android:textColor="?attr/colorPrimary"
             android:layout_marginStart="4dp"/>
-
-        <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@drawable/ic_settings"/>
-
     </LinearLayout>
 
     <!-- Search -->
@@ -75,14 +63,6 @@
             app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_my_city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Kota Saya"
-                android:checked="true"
-                style="@style/Widget.MaterialComponents.Chip.Filter"/>
-
-            <com.google.android.material.chip.Chip
                 android:id="@+id/chip_favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -99,68 +79,6 @@
         </com.google.android.material.chip.ChipGroup>
 
     </HorizontalScrollView>
-
-    <!-- Bandingkan Card -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_compare"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="12dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="2dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="12dp"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:gravity="center"
-                android:text="⇄"
-                android:textSize="18sp"
-                android:textColor="@color/white"
-                android:background="@color/ocean"
-                android:layout_marginEnd="12dp"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Bandingkan 2 Kota"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorPrimary"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Lihat perbedaan kualitas udara secara real-time"
-                    android:textSize="12sp"
-                    android:textColor="?attr/colorSecondary"/>
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="›"
-                android:textSize="24sp"
-                android:textColor="?attr/colorSecondary"/>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
     <!-- Hasil Pencarian Header -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -178,20 +96,6 @@
             android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="?attr/colorOnSurface"/>
-
-        <ImageView
-            android:id="@+id/btn_view_list"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/ic_bookmark"
-            android:layout_marginEnd="8dp"/>
-
-        <ImageView
-            android:id="@+id/btn_view_grid"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/ic_explore"/>
-
     </LinearLayout>
 
     <!-- RecyclerView -->

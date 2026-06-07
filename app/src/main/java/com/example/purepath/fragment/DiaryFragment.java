@@ -54,15 +54,37 @@ public class DiaryFragment extends Fragment {
     }
 
     private void setupChart() {
-        List<BarEntry> entries = new ArrayList<>();
-        int[] colors = new int[aqiData.length];
+        DiaryDao dao = new DiaryDao(requireContext());
+        List<DiaryEntry> last7 = dao.getLast7Entries();
 
-        for (int i = 0; i < aqiData.length; i++) {
-            entries.add(new BarEntry(i, aqiData[i]));
-            if (aqiData[i] <= 50) colors[i] = Color.parseColor("#52B788");
-            else if (aqiData[i] <= 100) colors[i] = Color.parseColor("#FFB703");
-            else if (aqiData[i] <= 150) colors[i] = Color.parseColor("#F4845F");
+        if (last7.isEmpty()) {
+            barChart.setVisibility(android.view.View.GONE);
+            tvWeeklyAvg.setText("Belum ada data minggu ini");
+            return;
+        }
+
+        // Balik urutan supaya dari lama ke baru (kiri ke kanan)
+        java.util.Collections.reverse(last7);
+
+        List<BarEntry> entries = new ArrayList<>();
+        int[] colors = new int[last7.size()];
+        String[] labels = new String[last7.size()];
+
+        int total = 0;
+        for (int i = 0; i < last7.size(); i++) {
+            DiaryEntry entry = last7.get(i);
+            entries.add(new BarEntry(i, entry.getAqi()));
+            total += entry.getAqi();
+
+            // Warna berdasarkan AQI
+            if (entry.getAqi() <= 50) colors[i] = Color.parseColor("#52B788");
+            else if (entry.getAqi() <= 100) colors[i] = Color.parseColor("#FFB703");
+            else if (entry.getAqi() <= 150) colors[i] = Color.parseColor("#F4845F");
             else colors[i] = Color.parseColor("#E63946");
+
+            // Label tanggal singkat
+            String date = entry.getDate();
+            labels[i] = date.length() >= 3 ? date.substring(0, 3) : date;
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "AQI");
@@ -79,13 +101,18 @@ public class DiaryFragment extends Fragment {
         barChart.getAxisLeft().setTextColor(Color.GRAY);
 
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(days));
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setTextColor(Color.GRAY);
         xAxis.setGranularity(1f);
 
         barChart.invalidate();
+
+        // Update rata-rata
+        int avg = total / last7.size();
+        String avgLabel = avg <= 50 ? "Baik" : avg <= 100 ? "Sedang" : "Buruk";
+        tvWeeklyAvg.setText("Rata-rata AQI minggu ini: " + avg + " (" + avgLabel + ")");
     }
 
     private void setupRecyclerView() {
@@ -93,7 +120,6 @@ public class DiaryFragment extends Fragment {
         List<DiaryEntry> diaryList = dao.getAllEntries();
 
         if (diaryList.isEmpty()) {
-            // Tampilkan dummy kalau belum ada data
             diaryList.add(new DiaryEntry("Hari ini", "Belum ada data tercatat", 0, "N/A"));
         }
 
@@ -103,18 +129,20 @@ public class DiaryFragment extends Fragment {
     }
 
     private void calculateInsight() {
-        int goodDays = 0, badDays = 0;
-        int total = 0;
+        DiaryDao dao = new DiaryDao(requireContext());
+        List<DiaryEntry> last7 = dao.getLast7Entries();
 
-        for (int aqi : aqiData) {
-            total += aqi;
-            if (aqi <= 50) goodDays++;
-            else if (aqi > 100) badDays++;
+        if (last7.isEmpty()) {
+            tvInsight.setText("Belum ada data untuk dianalisis.");
+            return;
         }
 
-        int avg = total / aqiData.length;
-        String avgLabel = avg <= 50 ? "Baik" : avg <= 100 ? "Sedang" : "Buruk";
-        tvWeeklyAvg.setText("Rata-rata AQI minggu ini: " + avg + " (" + avgLabel + ")");
+        int goodDays = 0, badDays = 0, total = 0;
+        for (DiaryEntry entry : last7) {
+            total += entry.getAqi();
+            if (entry.getAqi() <= 50) goodDays++;
+            else if (entry.getAqi() > 100) badDays++;
+        }
 
         tvInsight.setText("Minggu ini kamu terpapar udara bersih " + goodDays +
                 " hari, udara buruk " + badDays + " hari. " +

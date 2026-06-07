@@ -1,6 +1,9 @@
 package com.example.purepath.fragment;
 
+import android.Manifest;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import com.example.purepath.R;
 import com.example.purepath.network.AirPollutionResponse;
@@ -16,6 +20,8 @@ import com.example.purepath.network.ApiClient;
 import com.example.purepath.network.MeteoResponse;
 import com.example.purepath.network.WeatherResponse;
 import com.example.purepath.database.DiaryDao;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import retrofit2.Call;
@@ -36,6 +42,9 @@ public class HomeFragment extends Fragment {
 
     private int currentAqi = 0;
     private double currentUv = 0;
+
+    private FusedLocationProviderClient fusedLocationClient;
+    private static final int LOCATION_PERMISSION_REQUEST = 1001;
 
     @Nullable
     @Override
@@ -64,9 +73,9 @@ public class HomeFragment extends Fragment {
         progressBreath = view.findViewById(R.id.progress_breath);
 
         loadUserGreeting();
-        fetchWeatherData();
-        fetchAirQuality();
-        fetchUvIndex();
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+        requestLocationAndFetch();
 
         return view;
     }
@@ -86,6 +95,56 @@ public class HomeFragment extends Fragment {
         else if (hour < 18) greeting = "Selamat sore";
         else greeting = "Selamat malam";
         tvGreeting.setText(name.isEmpty() ? greeting + "!" : greeting + ", " + name + "!");
+    }
+
+    private void requestLocationAndFetch() {
+        if (ActivityCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST);
+            return;
+        }
+        getLocationAndFetch();
+    }
+
+    private void getLocationAndFetch() {
+        if (ActivityCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Pakai koordinat default Makassar
+            fetchAllData();
+            return;
+        }
+
+        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            if (location != null) {
+                lat = location.getLatitude();
+                lon = location.getLongitude();
+            }
+            // Fetch data dengan koordinat GPS atau default
+            fetchAllData();
+        }).addOnFailureListener(e -> {
+            // Pakai koordinat default
+            fetchAllData();
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                            @NonNull int[] grantResults) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLocationAndFetch();
+            } else {
+                // Permission ditolak, pakai koordinat default
+                fetchAllData();
+            }
+        }
+    }
+
+    private void fetchAllData() {
+        fetchWeatherData();
+        fetchAirQuality();
+        fetchUvIndex();
     }
 
     private void fetchWeatherData() {

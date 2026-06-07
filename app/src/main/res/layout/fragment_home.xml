@@ -29,14 +29,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/iv_profile"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_settings"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Greeting -->
@@ -54,7 +46,7 @@
             android:id="@+id/tv_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="📍 Jakarta Selatan, Indonesia"
+            android:text="📍- "
             android:textSize="14sp"
             android:textColor="?attr/colorSecondary"
             android:layout_marginBottom="16dp"/>
@@ -294,7 +286,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="BREATH INDEX™"
+                    android:text="BREATH INDEX"
                     android:textSize="11sp"
                     android:textColor="?attr/colorSecondary"
                     android:letterSpacing="0.1"

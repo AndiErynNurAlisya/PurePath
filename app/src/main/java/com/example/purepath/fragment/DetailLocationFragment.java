@@ -58,14 +58,11 @@ public class DetailLocationFragment extends Fragment {
         tvAqiDesc = view.findViewById(R.id.tv_aqi_desc);
         tvPm25 = view.findViewById(R.id.tv_pm25);
         tvPm10 = view.findViewById(R.id.tv_pm10);
-        tvCo = view.findViewById(R.id.tv_co);
         tvNo2 = view.findViewById(R.id.tv_no2);
         tvO3 = view.findViewById(R.id.tv_o3);
-        tvSo2 = view.findViewById(R.id.tv_so2);
         tvFeelsLike = view.findViewById(R.id.tv_feels_like);
         tvHumidity = view.findViewById(R.id.tv_humidity);
         tvWind = view.findViewById(R.id.tv_wind);
-        tvVisibility = view.findViewById(R.id.tv_visibility);
         tvUvLabel = view.findViewById(R.id.tv_uv_label);
         tvUvValue = view.findViewById(R.id.tv_uv_value);
         tvSaran = view.findViewById(R.id.tv_saran);
