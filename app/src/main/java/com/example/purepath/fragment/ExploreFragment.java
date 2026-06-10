@@ -90,11 +90,6 @@ public class ExploreFragment extends Fragment {
                 {"Surabaya", "Jawa Timur, Indonesia", "-7.2575", "112.7521"},
                 {"Yogyakarta", "DI Yogyakarta, Indonesia", "-7.7956", "110.3695"},
                 {"Medan", "Sumatera Utara, Indonesia", "3.5952", "98.6722"},
-                {"Makassar", "Sulawesi Selatan, Indonesia", "-5.1477", "119.4327"},
-                {"Bali", "Bali, Indonesia", "-8.3405", "115.0920"},
-                {"Balikpapan", "Kalimantan Timur, Indonesia", "-1.2379", "116.8529"},
-                {"Semarang", "Jawa Tengah, Indonesia", "-6.9932", "110.4203"},
-                {"Palembang", "Sumatera Selatan, Indonesia", "-2.9761", "104.7754"}
         };
 
         locationList.clear();
@@ -124,6 +119,7 @@ public class ExploreFragment extends Fragment {
 
                                 synchronized (results) {
                                     results.add(loc);
+                                    results.sort((a, b) -> a.getCityName().compareTo(b.getCityName()));
                                     requireActivity().runOnUiThread(() ->
                                             adapter.updateList(new ArrayList<>(results)));
                                 }
@@ -166,22 +162,27 @@ public class ExploreFragment extends Fragment {
         com.google.android.material.chip.Chip chipRecent =
                 view.findViewById(R.id.chip_recent);
 
-
         chipFavorite.setOnCheckedChangeListener((btn, isChecked) -> {
             if (isChecked) {
+                chipRecent.setChecked(false);
                 String saved = prefs.getString("bookmarks", "");
                 loadFromSaved(saved);
             } else {
-                loadRealData();
+                if (!chipRecent.isChecked()) {
+                    loadRealData();
+                }
             }
         });
 
         chipRecent.setOnCheckedChangeListener((btn, isChecked) -> {
             if (isChecked) {
+                chipFavorite.setChecked(false);
                 String saved = prefs.getString("recent_searches", "");
                 loadFromSaved(saved);
             } else {
-                loadRealData();
+                if (!chipFavorite.isChecked()) {
+                    loadRealData();
+                }
             }
         });
     }
@@ -253,16 +254,23 @@ public class ExploreFragment extends Fragment {
 
     private void loadFromSaved(String saved) {
         locationList.clear();
+
         if (saved.isEmpty()) {
-            adapter.notifyDataSetChanged();
+            adapter.updateList(new ArrayList<>());
+
+            android.widget.Toast.makeText(getContext(),
+                    "Belum ada data tersimpan",
+                    android.widget.Toast.LENGTH_SHORT).show();
             return;
         }
 
         String[] entries = saved.split("##");
+        List<Location> savedLocations = new ArrayList<>();
+
         for (String entry : entries) {
             String[] parts = entry.split("\\|");
             if (parts.length >= 6) {
-                locationList.add(new Location(
+                savedLocations.add(new Location(
                         parts[0], parts[1],
                         Integer.parseInt(parts[2]),
                         parts[3], false,
@@ -271,7 +279,9 @@ public class ExploreFragment extends Fragment {
                 ));
             }
         }
-        adapter.notifyDataSetChanged();
+
+        locationList.addAll(savedLocations);
+        adapter.updateList(new ArrayList<>(locationList));
     }
 
     private void saveToRecentSearch(Location location) {
