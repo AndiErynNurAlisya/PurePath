@@ -11,6 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
 
     private NavController navController;
+    private BottomNavigationView bottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +23,15 @@ public class MainActivity extends AppCompatActivity {
 
         navController = navHostFragment.getNavController();
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
+        bottomNav = findViewById(R.id.bottom_nav);
         NavigationUI.setupWithNavController(bottomNav, navController);
+    }
+
+    public void navigateToSettings() {
+        bottomNav.setSelectedItemId(R.id.settingsFragment);
+    }
+
+    public void navigateToHome() {
+        bottomNav.setSelectedItemId(R.id.homeFragment);
     }
 }

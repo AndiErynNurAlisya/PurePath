@@ -3,13 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:background="?android:attr/colorBackground"
+    android:clipToPadding="false"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:clipToPadding="false"
+        android:clipChildren="false">
 
         <!-- Header -->
         <LinearLayout
@@ -23,16 +27,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Diary"
+                android:text="PurePath"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorPrimary"/>
-
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_settings"/>
-
         </LinearLayout>
 
         <!-- Weekly Exposure Card -->
@@ -40,7 +38,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/PurePath.Card"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="12dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -96,9 +96,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
+            app:cardElevation="6dp"
+            app:cardUseCompatPadding="true"
             app:cardBackgroundColor="@color/navy"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="12dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -153,13 +154,16 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="?attr/colorOnSurface"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_diary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"/>
+            android:nestedScrollingEnabled="false"
+            android:clipToPadding="false"
+            android:clipChildren="false"/>
 
     </LinearLayout>
 </ScrollView>

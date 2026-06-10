@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import com.example.purepath.R;
+import com.example.purepath.activity.MainActivity;
 import com.example.purepath.network.AirPollutionResponse;
 import com.example.purepath.network.ApiClient;
 import com.example.purepath.network.MeteoResponse;
@@ -22,11 +23,17 @@ import com.example.purepath.network.WeatherResponse;
 import com.example.purepath.database.DiaryDao;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import java.util.List;
+import java.util.ArrayList;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 public class HomeFragment extends Fragment {
 
@@ -35,6 +42,8 @@ public class HomeFragment extends Fragment {
     private TextView tvTemp, tvWeatherDesc, tvHumidity, tvWind, tvUv;
     private TextView tvBreathIndex, tvBreathDesc, tvRekoTitle, tvRekoDesc;
     private ProgressBar progressBreath;
+
+    private BottomNavigationView bottomNav;
 
     // Koordinat default Makassar
     private double lat = -5.1477;
@@ -71,6 +80,10 @@ public class HomeFragment extends Fragment {
         tvRekoTitle = view.findViewById(R.id.tv_reko_title);
         tvRekoDesc = view.findViewById(R.id.tv_reko_desc);
         progressBreath = view.findViewById(R.id.progress_breath);
+
+        view.findViewById(R.id.btn_lihat_profil).setOnClickListener(v -> {
+            ((MainActivity) requireActivity()).navigateToSettings();
+        });
 
         loadUserGreeting();
 
@@ -251,8 +264,9 @@ public class HomeFragment extends Fragment {
     private void saveToDiary() {
         if (!isAdded()) return;
 
-        String today = new java.text.SimpleDateFormat("EEEE, dd MMM",
-                new java.util.Locale("id")).format(new java.util.Date());
+        // Ganti format ke yyyy-MM-dd untuk sorting yang benar
+        String today = new java.text.SimpleDateFormat("yyyy-MM-dd",
+                java.util.Locale.getDefault()).format(new java.util.Date());
 
         String aqiLabel = getAqiLabel(currentAqi);
         String desc = getAqiDesc(currentAqi);
@@ -328,22 +342,30 @@ public class HomeFragment extends Fragment {
     }
 
     private String getUvLabel(double uv) {
-        if (uv <= 2) return "Rendah";
-        else if (uv <= 5) return "Sedang";
-        else if (uv <= 7) return "Tinggi";
-        else if (uv <= 10) return "Sangat Tinggi";
-        else return "Ekstrem";
+        if (uv < 3.0) {
+            return "Rendah";
+        } else if (uv < 6.0) {
+            return "Sedang";
+        } else if (uv < 8.0) {
+            return "Tinggi";
+        } else if (uv < 11.0) {
+            return "Sangat Tinggi";
+        } else {
+            return "Ekstrem";
+        }
     }
 
     private void updateRekomendasi(int aqi, double uv) {
         if (tvRekoTitle == null) return;
+
         boolean hasAsma = prefs.getBoolean("health_asma", false);
         boolean hasIspa = prefs.getBoolean("health_ispa", false);
         boolean hasLupus = prefs.getBoolean("health_lupus", false);
         boolean hasEksim = prefs.getBoolean("health_eksim", false);
         boolean hasRosacea = prefs.getBoolean("health_rosacea", false);
         boolean hasHerpes = prefs.getBoolean("health_herpes", false);
-        boolean anyCondition = hasAsma || hasIspa || hasLupus || hasEksim || hasRosacea || hasHerpes;
+        boolean anyCondition = hasAsma || hasIspa || hasLupus ||
+                hasEksim || hasRosacea || hasHerpes;
 
         if (!anyCondition) {
             if (aqi <= 1) {
@@ -359,18 +381,41 @@ public class HomeFragment extends Fragment {
             return;
         }
 
+        // Kumpulkan SEMUA peringatan sekaligus (fix komorbid)
+        List<String> warnings = new ArrayList<>();
+
+        // Cek AQI untuk penyakit pernapasan
         if ((hasAsma || hasIspa) && aqi >= 3) {
-            tvRekoTitle.setText("⚠️ Risiko Tinggi Pernapasan");
-            tvRekoDesc.setText("AQI tinggi berbahaya untuk kondisi Anda. Gunakan masker N95.");
-        } else if ((hasLupus || hasRosacea || hasHerpes) && uv >= 6) {
-            tvRekoTitle.setText("⚠️ UV Index Tinggi");
-            tvRekoDesc.setText("Gunakan tabir surya SPF 50+ dan hindari paparan matahari langsung.");
-        } else if (hasEksim && (aqi >= 3 || uv >= 6)) {
-            tvRekoTitle.setText("⚠️ Waspada untuk Eksim");
-            tvRekoDesc.setText("Jaga kelembaban kulit dan gunakan pelindung hari ini.");
-        } else {
+            warnings.add("⚠️ AQI tinggi berbahaya untuk pernapasan Anda. Gunakan masker N95.");
+        } else if ((hasAsma || hasIspa) && aqi >= 2) {
+            warnings.add("⚡ Kualitas udara sedang. Batasi aktivitas luar ruangan yang berat.");
+        }
+
+        // Cek UV untuk penyakit kulit/autoimun
+        if ((hasLupus || hasRosacea || hasHerpes) && uv >= 6) {
+            warnings.add("⚠️ UV " + (int)uv + " berbahaya. Gunakan sunscreen SPF 50+ dan pakaian pelindung.");
+        } else if ((hasLupus || hasRosacea || hasHerpes) && uv >= 3) {
+            warnings.add("☀️ UV sedang. Disarankan memakai sunscreen SPF 30+.");
+        }
+
+        // Cek keduanya untuk Eksim
+        if (hasEksim) {
+            if (aqi >= 3 && uv >= 6) {
+                warnings.add("⚠️ Polusi + UV tinggi berbahaya untuk eksim. Jaga kelembaban kulit.");
+            } else if (aqi >= 3) {
+                warnings.add("⚡ Polusi tinggi dapat memperburuk eksim Anda.");
+            } else if (uv >= 6) {
+                warnings.add("☀️ UV tinggi dapat memperburuk eksim. Hindari paparan langsung.");
+            }
+        }
+
+        if (warnings.isEmpty()) {
             tvRekoTitle.setText("✅ Kondisi Relatif Aman");
             tvRekoDesc.setText("Kualitas udara dan UV index dalam batas aman untuk kondisi Anda.");
+        } else {
+            tvRekoTitle.setText(warnings.size() > 1 ?
+                    "⚠️ " + warnings.size() + " Peringatan Hari Ini" : "Peringatan Kesehatan");
+            tvRekoDesc.setText(String.join("\n\n", warnings));
         }
     }
 

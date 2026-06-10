@@ -42,12 +42,12 @@ public class ExploreFragment extends Fragment {
         etSearch = view.findViewById(R.id.et_search);
 
         setupRecyclerView();
-        loadDummyData();
+        loadRealData();
         setupSearch();
         setupChipFilter(view);
 
         swipeRefresh.setOnRefreshListener(() -> {
-            loadDummyData();
+            loadRealData();
             swipeRefresh.setRefreshing(false);
         });
 
@@ -81,19 +81,60 @@ public class ExploreFragment extends Fragment {
         rvLocations.setAdapter(adapter);
     }
 
-    private void loadDummyData() {
+    private void loadRealData() {
+        // Daftar kota dengan koordinatnya
+        List<double[]> cities = new ArrayList<>();
+        String[][] cityInfo = {
+                {"Jakarta Pusat", "DKI Jakarta, Indonesia", "-6.1751", "106.8650"},
+                {"Bandung", "Jawa Barat, Indonesia", "-6.9175", "107.6191"},
+                {"Surabaya", "Jawa Timur, Indonesia", "-7.2575", "112.7521"},
+                {"Yogyakarta", "DI Yogyakarta, Indonesia", "-7.7956", "110.3695"},
+                {"Medan", "Sumatera Utara, Indonesia", "3.5952", "98.6722"},
+                {"Makassar", "Sulawesi Selatan, Indonesia", "-5.1477", "119.4327"},
+                {"Bali", "Bali, Indonesia", "-8.3405", "115.0920"},
+                {"Balikpapan", "Kalimantan Timur, Indonesia", "-1.2379", "116.8529"},
+                {"Semarang", "Jawa Tengah, Indonesia", "-6.9932", "110.4203"},
+                {"Palembang", "Sumatera Selatan, Indonesia", "-2.9761", "104.7754"}
+        };
+
         locationList.clear();
-        locationList.add(new Location("Jakarta Pusat", "DKI Jakarta, Indonesia", 78, "Sedang", false, -6.1751, 106.8650));
-        locationList.add(new Location("Bandung", "Jawa Barat, Indonesia", 32, "Baik", true, -6.9175, 107.6191));
-        locationList.add(new Location("Surabaya", "Jawa Timur, Indonesia", 154, "Tidak Sehat", false, -7.2575, 112.7521));
-        locationList.add(new Location("Yogyakarta", "DI Yogyakarta, Indonesia", 62, "Sedang", false, -7.7956, 110.3695));
-        locationList.add(new Location("Medan", "Sumatera Utara, Indonesia", 45, "Baik", false, 3.5952, 98.6722));
-        locationList.add(new Location("Makassar", "Sulawesi Selatan, Indonesia", 55, "Sedang", false, -5.1477, 119.4327));
-        locationList.add(new Location("Bali", "Bali, Indonesia", 28, "Baik", false, -8.3405, 115.0920));
-        locationList.add(new Location("Balikpapan", "Kalimantan Timur, Indonesia", 40, "Baik", false, -1.2379, 116.8529));
-        locationList.add(new Location("Semarang", "Jawa Tengah, Indonesia", 88, "Sedang", false, -6.9932, 110.4203));
-        locationList.add(new Location("Palembang", "Sumatera Selatan, Indonesia", 95, "Sedang", false, -2.9761, 104.7754));
         adapter.notifyDataSetChanged();
+
+        List<Location> results = new ArrayList<>();
+
+        for (String[] city : cityInfo) {
+            double lat = Double.parseDouble(city[2]);
+            double lon = Double.parseDouble(city[3]);
+            String name = city[0];
+            String province = city[1];
+
+            ApiClient.getWeatherService().getAirPollution(lat, lon, ApiClient.OWM_API_KEY)
+                    .enqueue(new retrofit2.Callback<AirPollutionResponse>() {
+                        @Override
+                        public void onResponse(retrofit2.Call<AirPollutionResponse> call,
+                                               retrofit2.Response<AirPollutionResponse> response) {
+                            if (response.isSuccessful() && response.body() != null
+                                    && !response.body().list.isEmpty() && isAdded()) {
+                                int owmAqi = response.body().list.get(0).main.aqi;
+                                int aqiDisplay = convertAqi(owmAqi);
+                                String status = getAqiStatus(owmAqi);
+
+                                Location loc = new Location(name, province, aqiDisplay,
+                                        status, false, lat, lon);
+
+                                synchronized (results) {
+                                    results.add(loc);
+                                    requireActivity().runOnUiThread(() ->
+                                            adapter.updateList(new ArrayList<>(results)));
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(retrofit2.Call<AirPollutionResponse> call,
+                                              Throwable t) {}
+                    });
+        }
     }
 
     private void setupSearch() {
@@ -105,7 +146,7 @@ public class ExploreFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String query = s.toString().trim();
                 if (query.isEmpty()) {
-                    loadDummyData();
+                    loadRealData();
                 } else if (query.length() >= 3) {
                     searchFromApi(query);
                 }
@@ -126,14 +167,22 @@ public class ExploreFragment extends Fragment {
                 view.findViewById(R.id.chip_recent);
 
 
-        chipFavorite.setOnClickListener(v -> {
-            String saved = prefs.getString("bookmarks", "");
-            loadFromSaved(saved);
+        chipFavorite.setOnCheckedChangeListener((btn, isChecked) -> {
+            if (isChecked) {
+                String saved = prefs.getString("bookmarks", "");
+                loadFromSaved(saved);
+            } else {
+                loadRealData();
+            }
         });
 
-        chipRecent.setOnClickListener(v -> {
-            String saved = prefs.getString("recent_searches", "");
-            loadFromSaved(saved);
+        chipRecent.setOnCheckedChangeListener((btn, isChecked) -> {
+            if (isChecked) {
+                String saved = prefs.getString("recent_searches", "");
+                loadFromSaved(saved);
+            } else {
+                loadRealData();
+            }
         });
     }
 

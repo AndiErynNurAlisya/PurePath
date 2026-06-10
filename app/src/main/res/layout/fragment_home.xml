@@ -3,14 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
+    android:background="?android:attr/colorBackground"
+    android:clipToPadding="false"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:clipToPadding="false"
+        android:clipChildren="false">
 
         <!-- Header -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,13 +59,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/PurePath.Card"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            app:cardElevation="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -108,7 +112,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            android:clipToPadding="false"
+            android:clipChildren="false">
 
             <!-- Suhu -->
             <com.google.android.material.card.MaterialCardView
@@ -180,7 +186,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="KELEMBABAN"
+                        android:text="Kelembaban"
                         android:textSize="11sp"
                         android:textColor="?attr/colorSecondary"/>
                 </LinearLayout>
@@ -193,7 +199,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            android:clipToPadding="false"
+            android:clipChildren="false">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
@@ -224,9 +232,10 @@
                         android:textColor="?attr/colorOnSurface"/>
 
                     <TextView
+                        android:id="@+id/tv_wind_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ANGIN"
+                        android:text="Angin"
                         android:textSize="11sp"
                         android:textColor="?attr/colorSecondary"/>
                 </LinearLayout>
@@ -262,7 +271,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="UV INDEX"
+                        android:text="UV Index"
                         android:textSize="11sp"
                         android:textColor="?attr/colorSecondary"/>
                 </LinearLayout>
@@ -346,7 +355,7 @@
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
             app:cardBackgroundColor="@color/navy"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="32dp">
 
             <LinearLayout
                 android:layout_width="match_parent"

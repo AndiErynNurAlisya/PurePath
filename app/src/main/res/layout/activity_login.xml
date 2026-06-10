@@ -41,13 +41,13 @@
 
     </LinearLayout>
 
-    <!-- Form Card -->
+    <!-- Form Card - DIUBAH: Menggunakan colorSurface agar mengikuti tema -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="24dp"
         app:cardElevation="8dp"
-        app:cardBackgroundColor="@color/white">
+        app:cardBackgroundColor="?attr/colorSurface">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:text="EMAIL"
                 android:textSize="11sp"
-                android:textColor="@color/text_secondary_light"
+                android:textColor="?attr/colorSecondary"
                 android:letterSpacing="0.1"
                 android:layout_marginBottom="6dp"/>
 
@@ -78,7 +78,8 @@
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"/>
+                    android:inputType="textEmailAddress"
+                    android:textColor="?attr/colorOnSurface"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,7 +97,7 @@
                     android:layout_weight="1"
                     android:text="PASSWORD"
                     android:textSize="11sp"
-                    android:textColor="@color/text_secondary_light"
+                    android:textColor="?attr/colorSecondary"
                     android:letterSpacing="0.1"/>
 
                 <TextView
@@ -105,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:text="Lupa Password?"
                     android:textSize="12sp"
-                    android:textColor="@color/ocean"/>
+                    android:textColor="?attr/colorPrimary"/>
 
             </LinearLayout>
 
@@ -123,7 +124,8 @@
                     android:id="@+id/et_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"/>
+                    android:inputType="textPassword"
+                    android:textColor="?attr/colorOnSurface"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,8 +136,8 @@
                 android:layout_height="wrap_content"
                 android:text="Ingat Saya"
                 android:textSize="13sp"
-                android:textColor="@color/text_primary_light"
-                android:buttonTint="@color/ocean"
+                android:textColor="?attr/colorOnSurface"
+                android:buttonTint="?attr/colorPrimary"
                 android:layout_marginBottom="20dp"/>
 
             <!-- Tombol Masuk -->
@@ -159,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:text="Belum punya akun? "
                     android:textSize="13sp"
-                    android:textColor="@color/text_secondary_light"/>
+                    android:textColor="?attr/colorSecondary"/>
 
                 <TextView
                     android:id="@+id/tv_go_register"
@@ -168,7 +170,7 @@
                     android:text="Daftar"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    android:textColor="@color/ocean"/>
+                    android:textColor="?attr/colorPrimary"/>
 
             </LinearLayout>
 

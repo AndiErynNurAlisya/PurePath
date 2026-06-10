@@ -3,13 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:background="?android:attr/colorBackground"
+    android:clipToPadding="false"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:clipToPadding="false"
+        android:clipChildren="false">
 
         <!-- Header -->
         <LinearLayout
@@ -30,16 +34,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="end">
 
                 <TextView
                     android:id="@+id/tv_city_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Jakarta Pusat"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnSurface"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -50,7 +55,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/PurePath.Card"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -78,7 +85,7 @@
                         android:id="@+id/tv_aqi_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="78"
+                        android:text="--"
                         android:textSize="56sp"
                         android:textStyle="bold"
                         android:textColor="@color/aqi_moderate"/>
@@ -132,7 +139,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/PurePath.Card"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -162,7 +171,7 @@
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                 android:text="PM2.5" android:textSize="11sp" android:textColor="?attr/colorSecondary"/>
                             <TextView android:id="@+id/tv_pm25" android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" android:text="25.4 μg/m³"
+                                android:layout_height="wrap_content" android:text="-- μg/m³"
                                 android:textSize="14sp" android:textStyle="bold" android:textColor="@color/aqi_moderate"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -181,7 +190,7 @@
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                 android:text="PM10" android:textSize="11sp" android:textColor="?attr/colorSecondary"/>
                             <TextView android:id="@+id/tv_pm10" android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" android:text="42.1 μg/m³"
+                                android:layout_height="wrap_content" android:text="-- μg/m³"
                                 android:textSize="14sp" android:textStyle="bold" android:textColor="@color/aqi_moderate"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -210,7 +219,7 @@
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                 android:text="O3" android:textSize="11sp" android:textColor="?attr/colorSecondary"/>
                             <TextView android:id="@+id/tv_o3" android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" android:text="54.3 μg/m³"
+                                android:layout_height="wrap_content" android:text="-- μg/m³"
                                 android:textSize="14sp" android:textStyle="bold" android:textColor="@color/aqi_moderate"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -230,7 +239,7 @@
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                 android:text="NO2" android:textSize="11sp" android:textColor="?attr/colorSecondary"/>
                             <TextView android:id="@+id/tv_no2" android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" android:text="15.2 μg/m³"
+                                android:layout_height="wrap_content" android:text="-- μg/m³"
                                 android:textSize="14sp" android:textStyle="bold" android:textColor="@color/aqi_moderate"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -254,7 +263,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/PurePath.Card"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -273,7 +284,7 @@
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="🌡️ Feels Like" android:textSize="11sp" android:textColor="?attr/colorSecondary"/>
                         <TextView android:id="@+id/tv_feels_like" android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" android:text="32°C"
+                            android:layout_height="wrap_content" android:text="--°C"
                             android:textSize="15sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
 
@@ -282,7 +293,7 @@
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="💧 Humidity" android:textSize="11sp" android:textColor="?attr/colorSecondary"/>
                         <TextView android:id="@+id/tv_humidity" android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" android:text="65%"
+                            android:layout_height="wrap_content" android:text="--%"
                             android:textSize="15sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
 
@@ -298,7 +309,7 @@
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="💨 Wind" android:textSize="11sp" android:textColor="?attr/colorSecondary"/>
                         <TextView android:id="@+id/tv_wind" android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" android:text="12 km/h NE"
+                            android:layout_height="wrap_content" android:text="-- km/h "
                             android:textSize="15sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
 
@@ -321,7 +332,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/PurePath.Card"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -398,7 +411,9 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="16dp"
             app:cardBackgroundColor="@color/navy"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -440,7 +455,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/PurePath.Card"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -471,7 +488,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="24dp"
+            android:clipToPadding="false">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_maps"

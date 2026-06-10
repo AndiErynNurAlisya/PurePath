@@ -25,8 +25,8 @@ import retrofit2.Response;
 public class DetailLocationFragment extends Fragment {
 
     private TextView tvCityName, tvAqiValue, tvAqiLabel, tvAqiDesc;
-    private TextView tvPm25, tvPm10, tvCo, tvNo2, tvO3, tvSo2;
-    private TextView tvFeelsLike, tvHumidity, tvWind, tvVisibility;
+    private TextView tvPm25, tvPm10, tvNo2, tvO3;
+    private TextView tvFeelsLike, tvHumidity, tvWind;
     private TextView tvUvLabel, tvUvValue, tvSaran;
     private ProgressBar progressUv;
     private SharedPreferences prefs;
@@ -83,7 +83,6 @@ public class DetailLocationFragment extends Fragment {
             if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
                 startActivity(intent);
             } else {
-                // Kalau Google Maps tidak ada, buka browser
                 Uri webUri = Uri.parse("https://maps.google.com/?q=" + lat + "," + lon);
                 startActivity(new Intent(Intent.ACTION_VIEW, webUri));
             }
@@ -119,7 +118,7 @@ public class DetailLocationFragment extends Fragment {
                     public void onResponse(@NonNull Call<AirPollutionResponse> call,
                                            @NonNull Response<AirPollutionResponse> response) {
                         if (response.isSuccessful() && response.body() != null
-                                && !response.body().list.isEmpty()) {
+                                && !response.body().list.isEmpty() && isAdded()) {
                             AirPollutionResponse.AqiData data = response.body().list.get(0);
                             requireActivity().runOnUiThread(() -> {
                                 int aqi = data.main.aqi;
@@ -128,9 +127,6 @@ public class DetailLocationFragment extends Fragment {
                                 tvPm10.setText(String.format("%.1f μg/m³", data.components.pm10));
                                 tvNo2.setText(String.format("%.1f μg/m³", data.components.no2));
                                 tvO3.setText(String.format("%.1f μg/m³", data.components.o3));
-                                // CO dan SO2 perlu ditambah di AirPollutionResponse
-                                tvCo.setText("N/A");
-                                tvSo2.setText("N/A");
                                 updateSaran(aqi);
                             });
                         }
@@ -147,13 +143,12 @@ public class DetailLocationFragment extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<WeatherResponse> call,
                                            @NonNull Response<WeatherResponse> response) {
-                        if (response.isSuccessful() && response.body() != null) {
+                        if (response.isSuccessful() && response.body() != null && isAdded()) {
                             WeatherResponse data = response.body();
                             requireActivity().runOnUiThread(() -> {
                                 tvFeelsLike.setText((int) data.main.temp + "°C");
                                 tvHumidity.setText(data.main.humidity + "%");
                                 tvWind.setText((int) data.wind.speed + " km/h");
-                                tvVisibility.setText("N/A");
                             });
                         }
                     }
@@ -169,7 +164,7 @@ public class DetailLocationFragment extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<MeteoResponse> call,
                                            @NonNull Response<MeteoResponse> response) {
-                        if (response.isSuccessful() && response.body() != null) {
+                        if (response.isSuccessful() && response.body() != null && isAdded()) {
                             double uv = response.body().current.uvIndex;
                             requireActivity().runOnUiThread(() -> {
                                 tvUvValue.setText(String.valueOf((int) uv));
