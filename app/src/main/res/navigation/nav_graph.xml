@@ -54,4 +54,10 @@
             android:defaultValue="0" />
     </fragment>
 
+    <fragment
+        android:id="@+id/bookmarkFragment"
+        android:name="com.example.purepath.fragment.BookmarkFragment"
+        android:label="Berita"
+        tools:layout="@layout/fragment_bookmark" />
+
 </navigation>

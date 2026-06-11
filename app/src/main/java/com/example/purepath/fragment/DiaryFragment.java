@@ -31,9 +31,6 @@ public class DiaryFragment extends Fragment {
     private DiaryAdapter adapter;
     private TextView tvWeeklyAvg, tvInsight;
 
-    private final String[] days = {"S", "S", "R", "K", "J", "S", "M"};
-    private final int[] aqiData = {45, 38, 152, 48, 82, 31, 24};
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -77,14 +74,25 @@ public class DiaryFragment extends Fragment {
             total += entry.getAqi();
 
             // Warna berdasarkan AQI
-            if (entry.getAqi() <= 50) colors[i] = Color.parseColor("#52B788");
-            else if (entry.getAqi() <= 100) colors[i] = Color.parseColor("#FFB703");
-            else if (entry.getAqi() <= 150) colors[i] = Color.parseColor("#F4845F");
+            int aqi = entry.getAqi();
+            if (aqi <= 50) colors[i] = Color.parseColor("#52B788");
+            else if (aqi <= 100) colors[i] = Color.parseColor("#FFB703");
+            else if (aqi <= 150) colors[i] = Color.parseColor("#F4845F");
             else colors[i] = Color.parseColor("#E63946");
 
-            // Label tanggal singkat
-            String date = entry.getDate();
-            labels[i] = date.length() >= 3 ? date.substring(0, 3) : date;
+            // Perbaikan Label X-Axis (menghindari "202")
+            String dateStr = entry.getDate();
+            if (dateStr.contains("-") && dateStr.length() >= 10) {
+                // Jika format yyyy-MM-dd, ambil dd/MM (misal 11/06)
+                String[] p = dateStr.split("-");
+                labels[i] = p[2] + "/" + p[1];
+            } else if (dateStr.contains(",")) {
+                // Jika format "Kamis, 11 Jun", ambil "11 Jun"
+                String[] p = dateStr.split(", ");
+                labels[i] = p.length > 1 ? p[1] : dateStr;
+            } else {
+                labels[i] = dateStr.length() > 5 ? dateStr.substring(0, 5) : dateStr;
+            }
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "AQI");
@@ -106,10 +114,10 @@ public class DiaryFragment extends Fragment {
         xAxis.setDrawGridLines(false);
         xAxis.setTextColor(Color.GRAY);
         xAxis.setGranularity(1f);
+        xAxis.setLabelCount(labels.length);
 
         barChart.invalidate();
 
-        // Update rata-rata
         int avg = total / last7.size();
         String avgLabel = avg <= 50 ? "Baik" : avg <= 100 ? "Sedang" : "Buruk";
         tvWeeklyAvg.setText("Rata-rata AQI minggu ini: " + avg + " (" + avgLabel + ")");
@@ -118,11 +126,6 @@ public class DiaryFragment extends Fragment {
     private void setupRecyclerView() {
         DiaryDao dao = new DiaryDao(requireContext());
         List<DiaryEntry> diaryList = dao.getAllEntries();
-
-        if (diaryList.isEmpty()) {
-            diaryList.add(new DiaryEntry("Hari ini", "Belum ada data tercatat", 0, "N/A"));
-        }
-
         adapter = new DiaryAdapter(getContext(), diaryList, entry -> {});
         rvDiary.setLayoutManager(new LinearLayoutManager(getContext()));
         rvDiary.setAdapter(adapter);
@@ -131,15 +134,10 @@ public class DiaryFragment extends Fragment {
     private void calculateInsight() {
         DiaryDao dao = new DiaryDao(requireContext());
         List<DiaryEntry> last7 = dao.getLast7Entries();
+        if (last7.isEmpty()) return;
 
-        if (last7.isEmpty()) {
-            tvInsight.setText("Belum ada data untuk dianalisis.");
-            return;
-        }
-
-        int goodDays = 0, badDays = 0, total = 0;
+        int goodDays = 0, badDays = 0;
         for (DiaryEntry entry : last7) {
-            total += entry.getAqi();
             if (entry.getAqi() <= 50) goodDays++;
             else if (entry.getAqi() > 100) badDays++;
         }

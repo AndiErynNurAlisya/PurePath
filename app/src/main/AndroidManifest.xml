@@ -42,6 +42,10 @@
             android:name=".activity.OnboardingActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

@@ -12,6 +12,11 @@ public class ApiClient {
     private static Retrofit retrofitOWM = null;
     private static Retrofit retrofitMeteo = null;
 
+    private static final String NEWS_BASE_URL = "https://newsapi.org/";
+    public static final String NEWS_API_KEY = "78f772bb3999424389cd471b4a4da36a";
+
+    private static Retrofit retrofitNews = null;
+
     public static OpenWeatherService getWeatherService() {
         if (retrofitOWM == null) {
             retrofitOWM = new Retrofit.Builder()
@@ -30,5 +35,15 @@ public class ApiClient {
                     .build();
         }
         return retrofitMeteo.create(MeteoApiService.class);
+    }
+
+    public static NewsApiService getNewsService() {
+        if (retrofitNews == null) {
+            retrofitNews = new Retrofit.Builder()
+                    .baseUrl(NEWS_BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return retrofitNews.create(NewsApiService.class);
     }
 }
