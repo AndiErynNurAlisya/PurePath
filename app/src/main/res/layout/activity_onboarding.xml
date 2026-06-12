@@ -7,7 +7,6 @@
     android:background="?attr/colorSurface"
     android:padding="24dp">
 
-    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,7 +42,6 @@
         android:textColor="?attr/colorSecondary"
         android:layout_marginBottom="24dp"/>
 
-    <!-- Kondisi Kesehatan -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -449,7 +447,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Tombol Lanjut -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_lanjut"
         android:layout_width="match_parent"

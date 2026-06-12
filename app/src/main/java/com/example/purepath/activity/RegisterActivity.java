@@ -56,14 +56,12 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // Simpan ke SharedPreferences
         prefs.edit()
                 .putString("user_name", name)
                 .putString("user_email", email)
                 .putString("user_password", password)
                 .apply();
 
-        // Lanjut ke Onboarding
         Intent intent = new Intent(this, OnboardingActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

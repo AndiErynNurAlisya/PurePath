@@ -15,7 +15,6 @@
         android:clipToPadding="false"
         android:clipChildren="false">
 
-        <!-- Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,7 +33,6 @@
 
         </LinearLayout>
 
-        <!-- Profil Card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -93,7 +91,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Health Profile Section -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -189,7 +186,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- App Preferences -->
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -213,7 +210,6 @@
                 android:orientation="vertical"
                 android:padding="8dp">
 
-                <!-- Theme -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -239,7 +235,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Logout Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_logout"
             android:layout_width="match_parent"

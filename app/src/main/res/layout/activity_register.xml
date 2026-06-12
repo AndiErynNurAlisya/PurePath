@@ -11,7 +11,6 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Logo -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +45,6 @@
             android:textColor="?attr/colorOnSurface"
             android:layout_marginBottom="20dp"/>
 
-        <!-- Nama -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,7 +71,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Email -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -100,7 +97,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Password -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -128,7 +124,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Konfirmasi Password -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -156,7 +151,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Tombol Daftar -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
@@ -165,7 +159,6 @@
             style="@style/PurePath.Button"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Sudah punya akun -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

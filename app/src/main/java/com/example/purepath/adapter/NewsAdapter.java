@@ -2,7 +2,6 @@ package com.example.purepath.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +41,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 article.getDescription() != null ? article.getDescription() : "");
         holder.tvSource.setText(article.getSourceName());
 
-        // Format tanggal
         try {
             java.text.SimpleDateFormat inputFormat =
                     new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",
@@ -56,7 +54,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             holder.tvDate.setText(article.getPublishedAt());
         }
 
-        // Load thumbnail dengan Glide
         if (article.getUrlToImage() != null && !article.getUrlToImage().isEmpty()) {
             Glide.with(context)
                     .load(article.getUrlToImage())
@@ -65,7 +62,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                     .into(holder.ivThumbnail);
         }
 
-        // Tap → buka browser
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, WebViewActivity.class);
             intent.putExtra("url", article.getUrl());

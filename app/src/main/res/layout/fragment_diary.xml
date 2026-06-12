@@ -15,7 +15,6 @@
         android:clipToPadding="false"
         android:clipChildren="false">
 
-        <!-- Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,7 +33,6 @@
 
         </LinearLayout>
 
-        <!-- Weekly Exposure Card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -74,7 +72,6 @@
 
                 </LinearLayout>
 
-                <!-- Bar Chart -->
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/bar_chart"
                     android:layout_width="match_parent"
@@ -92,7 +89,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Insight Card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -146,7 +142,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Riwayat Harian -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -38,11 +38,8 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DiaryEntry entry = entries.get(position);
 
-        // Jika string tanggal sudah terformat dari DB (e.g. "Rabu, 10 Jun"), 
-        // kita tampilkan langsung agar tidak error saat parsing yyyy-MM-dd.
         String dateStr = entry.getDate();
         try {
-            // Jika suatu saat kita simpan dalam format yyyy-MM-dd:
             if (dateStr.contains("-") && dateStr.length() == 10) {
                 java.text.SimpleDateFormat inputFormat =
                     new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US);

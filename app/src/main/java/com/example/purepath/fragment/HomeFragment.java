@@ -23,7 +23,6 @@ import com.example.purepath.network.WeatherResponse;
 import com.example.purepath.database.DiaryDao;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.CancellationTokenSource;
 
@@ -34,8 +33,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import java.util.List;
 import java.util.ArrayList;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+
 
 public class HomeFragment extends Fragment {
 
@@ -44,22 +42,15 @@ public class HomeFragment extends Fragment {
     private TextView tvTemp, tvWeatherDesc, tvHumidity, tvWind, tvUv;
     private TextView tvBreathIndex, tvBreathDesc, tvRekoTitle, tvRekoDesc;
     private ProgressBar progressBreath;
-
-    private BottomNavigationView bottomNav;
-
-    // Koordinat default Makassar
-    // SESUDAH — mulai dari 0, hanya diisi kalau dapat lokasi asli
     private double lat = 0;
     private double lon = 0;
-
     private boolean isRetrySnackbarShown = false;
     private CancellationTokenSource cancellationSource = new CancellationTokenSource();
 
     private int currentAqi = 0;
 
-    private int currentIspu = 0;  // ISPU asli hasil perhitungan
+    private int currentIspu = 0;
     private double currentUv = 0;
-
     private FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST = 1001;
 
@@ -135,27 +126,24 @@ public class HomeFragment extends Fragment {
             return;
         }
 
-        cancellationSource = new CancellationTokenSource();  // ◄ SATU-SATUNYA baris baru
+        cancellationSource = new CancellationTokenSource();
 
         isRetrySnackbarShown = false;  // reset agar Snackbar retry bisa muncul lagi
 
         // Tampilkan status loading
         tvLocation.setText("📍 Mencari lokasi Anda...");
 
-        // 1) Coba lokasi terakhir (cepat, dari cache)
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(location -> {
                     if (location != null) {
                         useLocation(location);
                     } else {
-                        // 2) Cache kosong → minta lokasi fresh
                         requestFreshLocation();
                     }
                 })
                 .addOnFailureListener(e -> requestFreshLocation());
     }
 
-    // Minta lokasi baru langsung dari GPS (lebih andal saat cache null)
     private void requestFreshLocation() {
         if (ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -170,14 +158,12 @@ public class HomeFragment extends Fragment {
             if (location != null) {
                 useLocation(location);
             } else {
-                // 3) Tetap null → jujur tampilkan error, JANGAN diam-diam pakai Makassar
                 showLocationError("Lokasi tidak ditemukan. Pastikan GPS aktif, lalu coba lagi.");
             }
         }).addOnFailureListener(e ->
                 showLocationError("Gagal mengambil lokasi. Periksa koneksi & GPS Anda."));
     }
 
-    // Lokasi valid didapat → simpan koordinat & ambil data
     private void useLocation(Location location) {
         lat = location.getLatitude();
         lon = location.getLongitude();
@@ -194,7 +180,6 @@ public class HomeFragment extends Fragment {
         tvAqiDesc.setText(message);
         tvWeatherDesc.setText("Data tidak tersedia");
 
-        // Tawarkan "Coba Lagi"
         com.google.android.material.snackbar.Snackbar.make(
                 requireView(), message, com.google.android.material.snackbar.Snackbar.LENGTH_LONG
         ).setAction("Coba Lagi", v -> requestLocationAndFetch()).show();
@@ -207,7 +192,6 @@ public class HomeFragment extends Fragment {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLocationAndFetch();
             } else {
-                // SEBELUM: fetchAllData();  ← diam-diam pakai Makassar
                 showLocationError("Izin lokasi ditolak. Aktifkan izin lokasi untuk melihat data area Anda.");
             }
         }
@@ -219,7 +203,7 @@ public class HomeFragment extends Fragment {
         fetchUvIndex();
     }
 
-    // Snackbar "Coba Lagi" tunggal saat data API gagal dimuat (mis. tidak ada koneksi)
+    // Snackbar "Coba Lagi" tunggal saat data API gagal dimuat
     private void showRetrySnackbar(String message) {
         if (!isAdded() || isRetrySnackbarShown) return;
         isRetrySnackbarShown = true;
@@ -318,8 +302,6 @@ public class HomeFragment extends Fragment {
                         String uvLabel = getUvLabel(currentUv);
                         tvUv.setText((int) currentUv + " (" + uvLabel + ")");
                         updateRekomendasi(currentAqi, currentUv);
-
-                        // Update database dengan nilai UV terbaru
                         saveToDiary();
                     });
                 }
@@ -340,8 +322,6 @@ public class HomeFragment extends Fragment {
     // Fungsi helper untuk menyimpan data ke SQLite
     private void saveToDiary() {
         if (!isAdded()) return;
-
-        // Ganti format ke yyyy-MM-dd untuk sorting yang benar
         String today = new java.text.SimpleDateFormat("yyyy-MM-dd",
                 java.util.Locale.getDefault()).format(new java.util.Date());
 
@@ -365,7 +345,7 @@ public class HomeFragment extends Fragment {
         else if (c <= 150.4) { xb = 55.4;  xa = 150.4; ib = 100; ia = 200; }
         else if (c <= 250.4) { xb = 150.4; xa = 250.4; ib = 200; ia = 300; }
         else if (c <= 500.0) { xb = 250.4; xa = 500.0; ib = 300; ia = 500; }
-        else return 500; // di luar skala maksimum
+        else return 500;
         double ispu = ((ia - ib) / (xa - xb)) * (c - xb) + ib;
         return (int) Math.round(ispu);
     }
@@ -385,7 +365,7 @@ public class HomeFragment extends Fragment {
             case 1: return "BAIK";
             case 2: return "SEDANG";
             case 3: return "TIDAK SEHAT";
-            case 4: return "SANGAT TIDAK SEHAT";  // ◄ diperbaiki (dulu "BURUK")
+            case 4: return "SANGAT TIDAK SEHAT";
             default: return "BERBAHAYA";
         }
     }
@@ -466,9 +446,6 @@ public class HomeFragment extends Fragment {
         boolean anyCondition = hasAsma || hasIspa || hasLupus ||
                 hasEksim || hasRosacea || hasHerpes;
 
-        // ============================================================
-        // KONDISI NORMAL (tanpa penyakit) — cek POLUSI + UV
-        // ============================================================
         if (!anyCondition) {
             List<String> umum = new ArrayList<>();
 
@@ -504,9 +481,7 @@ public class HomeFragment extends Fragment {
             return;
         }
 
-        // ============================================================
-        // ADA PENYAKIT — kelompokkan peringatan per FAKTOR
-        // ============================================================
+
         List<String> warnings = new ArrayList<>();
 
         // ---- FAKTOR 1: POLUSI UDARA (Asma, ISPA, Eksim) ----
@@ -544,9 +519,6 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        // ============================================================
-        // PENAMPILAN AKHIR
-        // ============================================================
         if (warnings.isEmpty()) {
             tvRekoTitle.setText("✅ Kondisi Relatif Aman");
             tvRekoDesc.setText("Kualitas udara dan UV index dalam batas aman untuk kondisi Anda.");

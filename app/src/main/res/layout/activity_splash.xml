@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- Background dekorasi dibuat menutupi layar -->
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
@@ -18,7 +17,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/dekorsplash" />
 
-    <!-- Logo di tengah secara horizontal dan agak ke atas -->
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="200dp"
@@ -30,7 +28,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />
 
-    <!-- Tagline diletakkan di bawah logo -->
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="wrap_content"

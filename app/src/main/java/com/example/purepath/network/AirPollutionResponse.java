@@ -17,7 +17,7 @@ public class AirPollutionResponse {
 
         public static class Main {
             @SerializedName("aqi")
-            public int aqi; // 1=Baik, 2=Sedang, 3=Tidak Sehat, 4=Buruk, 5=Sangat Buruk
+            public int aqi;
         }
 
         public static class Components {

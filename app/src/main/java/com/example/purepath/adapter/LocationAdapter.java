@@ -63,7 +63,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         holder.viewAqiColor.setBackgroundColor(color);
         holder.tvAqiValue.setTextColor(color);
 
-        // Bookmark
         if (location.isBookmarked()) {
             holder.ivBookmark.setImageResource(R.drawable.ic_bookmark_filled);
             holder.ivBookmark.setColorFilter(

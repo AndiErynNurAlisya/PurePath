@@ -59,7 +59,6 @@ public class OnboardingActivity extends AppCompatActivity {
                 return;
             }
 
-            // Simpan health profile
             prefs.edit()
                     .putBoolean("health_asma", cbAsma.isChecked())
                     .putBoolean("health_ispa", cbIspa.isChecked())

@@ -22,7 +22,6 @@ public class LoginActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("PurePathPrefs", 0);
 
-        // Kalau sudah login sebelumnya, langsung ke MainActivity
         if (prefs.getBoolean("is_logged_in", false)) {
             goToMain();
             return;
@@ -58,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
         String savedPassword = prefs.getString("user_password", "");
 
         if (email.equals(savedEmail) && password.equals(savedPassword)) {
-            // Login berhasil
             prefs.edit()
                     .putBoolean("is_logged_in", true)
                     .apply();

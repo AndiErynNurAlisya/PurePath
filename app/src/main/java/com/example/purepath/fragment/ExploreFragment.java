@@ -82,7 +82,6 @@ public class ExploreFragment extends Fragment {
     }
 
     private void loadRealData() {
-        // Daftar kota dengan koordinatnya
         List<double[]> cities = new ArrayList<>();
         String[][] cityInfo = {
                 {"Jakarta Pusat", "DKI Jakarta, Indonesia", "-6.1751", "106.8650"},

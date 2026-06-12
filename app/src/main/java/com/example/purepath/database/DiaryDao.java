@@ -28,7 +28,6 @@ public class DiaryDao {
         values.put(DatabaseHelper.COL_TEMP, temp);
         values.put(DatabaseHelper.COL_UV, uv);
 
-        // Insert atau replace kalau tanggal sama
         db.insertWithOnConflict(DatabaseHelper.TABLE_DIARY, null,
                 values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();

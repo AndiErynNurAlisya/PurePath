@@ -60,7 +60,6 @@ public class DiaryFragment extends Fragment {
             return;
         }
 
-        // Balik urutan supaya dari lama ke baru (kiri ke kanan)
         java.util.Collections.reverse(last7);
 
         List<BarEntry> entries = new ArrayList<>();
@@ -80,14 +79,11 @@ public class DiaryFragment extends Fragment {
             else if (aqi <= 150) colors[i] = Color.parseColor("#F4845F");
             else colors[i] = Color.parseColor("#E63946");
 
-            // Perbaikan Label X-Axis (menghindari "202")
             String dateStr = entry.getDate();
             if (dateStr.contains("-") && dateStr.length() >= 10) {
-                // Jika format yyyy-MM-dd, ambil dd/MM (misal 11/06)
                 String[] p = dateStr.split("-");
                 labels[i] = p[2] + "/" + p[1];
             } else if (dateStr.contains(",")) {
-                // Jika format "Kamis, 11 Jun", ambil "11 Jun"
                 String[] p = dateStr.split(", ");
                 labels[i] = p.length > 1 ? p[1] : dateStr;
             } else {

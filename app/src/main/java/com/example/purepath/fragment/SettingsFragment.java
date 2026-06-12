@@ -32,7 +32,6 @@ public class SettingsFragment extends Fragment {
 
         prefs = requireActivity().getSharedPreferences("PurePathPrefs", 0);
 
-        // Init views
         cbAsma = view.findViewById(R.id.cb_asma);
         cbIspa = view.findViewById(R.id.cb_ispa);
         cbLupus = view.findViewById(R.id.cb_lupus);
@@ -45,11 +44,9 @@ public class SettingsFragment extends Fragment {
         TextView tvEmail = view.findViewById(R.id.tv_user_email);
         MaterialButton btnLogout = view.findViewById(R.id.btn_logout);
 
-        // Load user info
         tvName.setText(prefs.getString("user_name", "Pengguna"));
         tvEmail.setText(prefs.getString("user_email", "email@purepath.ai"));
 
-        // Load health profile
         cbAsma.setChecked(prefs.getBoolean("health_asma", false));
         cbIspa.setChecked(prefs.getBoolean("health_ispa", false));
         cbLupus.setChecked(prefs.getBoolean("health_lupus", false));
@@ -57,11 +54,9 @@ public class SettingsFragment extends Fragment {
         cbRosacea.setChecked(prefs.getBoolean("health_rosacea", false));
         cbHerpes.setChecked(prefs.getBoolean("health_herpes", false));
 
-        // Load theme
         boolean isDark = prefs.getBoolean("dark_mode", false);
         switchDarkMode.setChecked(isDark);
 
-        // Dark mode toggle
         switchDarkMode.setOnCheckedChangeListener((btn, isChecked) -> {
             prefs.edit().putBoolean("dark_mode", isChecked).apply();
             AppCompatDelegate.setDefaultNightMode(
@@ -69,8 +64,7 @@ public class SettingsFragment extends Fragment {
                             : AppCompatDelegate.MODE_NIGHT_NO
             );
         });
-
-        // Ganti dengan auto-save per checkbox:
+        //auto-save chechkboc
         cbAsma.setOnCheckedChangeListener((btn, isChecked) ->
                 prefs.edit().putBoolean("health_asma", isChecked).apply());
 
@@ -91,20 +85,16 @@ public class SettingsFragment extends Fragment {
 
         // Logout
         btnLogout.setOnClickListener(v -> {
-            // Ubah is_logged_in menjadi false alih-alih clear() semua data (agar akun tetap ada)
             prefs.edit()
                     .putBoolean("is_logged_in", false)
                     .apply();
 
-            // Pindah ke LoginActivity
             Intent intent = new Intent(requireActivity(), LoginActivity.class);
-            
-            // Hapus stack activity agar user tidak bisa kembali (Back) ke halaman ini
+
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             
             startActivity(intent);
-            
-            // Tutup activity saat ini (MainActivity)
+
             requireActivity().finish();
         });
 

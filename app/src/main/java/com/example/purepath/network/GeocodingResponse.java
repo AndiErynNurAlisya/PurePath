@@ -24,6 +24,6 @@ public class GeocodingResponse {
 
     public static class LocalNames {
         @SerializedName("id")
-        public String id; // nama dalam bahasa Indonesia
+        public String id;
     }
 }

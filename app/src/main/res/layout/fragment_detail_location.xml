@@ -15,7 +15,6 @@
         android:clipToPadding="false"
         android:clipChildren="false">
 
-        <!-- Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,7 +49,6 @@
 
         </LinearLayout>
 
-        <!-- AQI Card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -125,7 +123,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Pollutant Details -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -249,7 +246,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Weather Conditions -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -286,6 +282,12 @@
                             android:layout_height="20dp"
                             android:src="@drawable/ic_termo"
                             android:scaleType="centerInside" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="UV Index"
+                            android:textSize="11sp"
+                            android:textColor="?attr/colorSecondary"/>
                         <TextView android:id="@+id/tv_feels_like" android:layout_width="wrap_content"
                             android:layout_height="wrap_content" android:text="--°C"
                             android:textSize="15sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface"/>
@@ -293,11 +295,18 @@
 
                     <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
                         android:layout_weight="1" android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_lembab"
-                            android:scaleType="centerInside" />
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_lembab"
+                                android:scaleType="centerInside"
+                                android:layout_marginEnd="4dp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Kelembaban"
+                                android:textSize="11sp"
+                                android:textColor="?attr/colorSecondary"/>
                         <TextView android:id="@+id/tv_humidity" android:layout_width="wrap_content"
                             android:layout_height="wrap_content" android:text="--%"
                             android:textSize="15sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface"/>
@@ -317,6 +326,12 @@
                             android:layout_height="20dp"
                             android:src="@drawable/ic_wind"
                             android:scaleType="centerInside" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Angin"
+                            android:textSize="11sp"
+                            android:textColor="?attr/colorSecondary"/>
                         <TextView android:id="@+id/tv_wind" android:layout_width="wrap_content"
                             android:layout_height="wrap_content" android:text="-- km/h "
                             android:textSize="15sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface"/>
@@ -327,7 +342,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- UV Index -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -414,7 +428,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Saran Persiapan -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -450,7 +463,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Interactive Checklist -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -493,7 +505,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Tombol Bawah -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

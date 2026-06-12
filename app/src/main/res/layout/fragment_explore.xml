@@ -8,7 +8,6 @@
     android:clipToPadding="false"
     android:clipChildren="false">
 
-    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,7 +26,6 @@
 
     </LinearLayout>
 
-    <!-- Search -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,7 +56,6 @@
         </com.google.android.material.textfield.TextInputLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Filter Chips -->
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -90,7 +87,6 @@
 
     </HorizontalScrollView>
 
-    <!-- Hasil Pencarian Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -109,7 +105,6 @@
             android:textColor="?attr/colorOnSurface"/>
     </LinearLayout>
 
-    <!-- RecyclerView -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"

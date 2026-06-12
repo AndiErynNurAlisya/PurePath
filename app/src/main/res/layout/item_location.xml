@@ -17,7 +17,6 @@
         android:gravity="center_vertical"
         android:padding="12dp">
 
-        <!-- Colored Left Border -->
         <View
             android:id="@+id/view_aqi_color"
             android:layout_width="4dp"
@@ -25,7 +24,6 @@
             android:background="@color/aqi_moderate"
             android:layout_marginEnd="12dp"/>
 
-        <!-- City Info -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -51,7 +49,6 @@
 
         </LinearLayout>
 
-        <!-- AQI Badge -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,7 +78,6 @@
 
         </LinearLayout>
 
-        <!-- Bookmark -->
         <ImageView
             android:id="@+id/iv_bookmark"
             android:layout_width="24dp"

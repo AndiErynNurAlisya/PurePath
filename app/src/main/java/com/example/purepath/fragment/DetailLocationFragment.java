@@ -44,7 +44,6 @@ public class DetailLocationFragment extends Fragment {
 
         prefs = requireActivity().getSharedPreferences("PurePathPrefs", 0);
 
-        // Ambil argument dari ExploreFragment
         if (getArguments() != null) {
             cityName = getArguments().getString("cityName", "Jakarta Pusat");
             lat = getArguments().getDouble("lat", -6.1751);
@@ -70,11 +69,9 @@ public class DetailLocationFragment extends Fragment {
 
         tvCityName.setText(cityName);
 
-        // Back button
         view.findViewById(R.id.btn_back).setOnClickListener(v ->
                 requireActivity().onBackPressed());
 
-        // Buka di Maps
         MaterialButton btnMaps = view.findViewById(R.id.btn_maps);
         btnMaps.setOnClickListener(v -> {
             Uri uri = Uri.parse("geo:" + lat + "," + lon + "?q=" + cityName);
@@ -88,7 +85,6 @@ public class DetailLocationFragment extends Fragment {
             }
         });
 
-        // Bagikan
         MaterialButton btnBagikan = view.findViewById(R.id.btn_bagikan);
         btnBagikan.setOnClickListener(v -> {
             String shareText = "Kualitas udara di " + cityName + " saat ini: " +
