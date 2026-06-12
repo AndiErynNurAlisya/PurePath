@@ -55,9 +55,9 @@
     </fragment>
 
     <fragment
-        android:id="@+id/bookmarkFragment"
-        android:name="com.example.purepath.fragment.BookmarkFragment"
+        android:id="@+id/newsFragment"
+        android:name="com.example.purepath.fragment.NewsFragment"
         android:label="Berita"
-        tools:layout="@layout/fragment_bookmark" />
+        tools:layout="@layout/fragment_news" />
 
 </navigation>

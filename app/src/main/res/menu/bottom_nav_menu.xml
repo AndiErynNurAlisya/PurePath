@@ -17,8 +17,8 @@
         android:title="Diary" />
 
     <item
-        android:id="@+id/bookmarkFragment"
-        android:icon="@drawable/ic_bookmark"
+        android:id="@+id/newsFragment"
+        android:icon="@drawable/ic_news"
         android:title="Berita" />
 
     <item

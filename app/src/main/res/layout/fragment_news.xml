@@ -15,18 +15,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Berita Lingkungan"
+            android:text="PurePath"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="?attr/colorPrimary"
             android:layout_marginBottom="4dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Informasi terkini seputar kualitas udara dan lingkungan"
-            android:textSize="13sp"
-            android:textColor="?attr/colorSecondary"/>
 
     </LinearLayout>
 

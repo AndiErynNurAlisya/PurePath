@@ -22,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BookmarkFragment extends Fragment {
+public class NewsFragment extends Fragment {
 
     private RecyclerView rvNews;
     private NewsAdapter adapter;
@@ -35,7 +35,7 @@ public class BookmarkFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bookmark, container, false);
+        View view = inflater.inflate(R.layout.fragment_news, container, false);
 
         rvNews = view.findViewById(R.id.rv_news);
         swipeRefresh = view.findViewById(R.id.swipe_refresh_news);
@@ -66,22 +66,22 @@ public class BookmarkFragment extends Fragment {
                 view.findViewById(R.id.chip_climate);
 
         chipAll.setOnClickListener(v -> {
-            currentQuery = "air quality OR pollution OR environment Indonesia";
+            currentQuery = "polusi udara OR kualitas udara OR lingkungan hidup OR KLHK";
             fetchNews(currentQuery);
         });
 
         chipPollution.setOnClickListener(v -> {
-            currentQuery = "air pollution Indonesia smog";
+            currentQuery = "polusi udara Jakarta smog PM2.5 asap";
             fetchNews(currentQuery);
         });
 
         chipAir.setOnClickListener(v -> {
-            currentQuery = "air quality index Indonesia AQI";
+            currentQuery = "ISPU kualitas udara AQI Indonesia";
             fetchNews(currentQuery);
         });
 
         chipClimate.setOnClickListener(v -> {
-            currentQuery = "climate change Indonesia environment";
+            currentQuery = "perubahan iklim emisi karbon deforestasi Indonesia";
             fetchNews(currentQuery);
         });
     }
