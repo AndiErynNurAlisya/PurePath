@@ -51,7 +51,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="384dp"
             android:orientation="vertical"
             android:padding="24dp">
 
@@ -59,27 +59,27 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EMAIL"
-                android:textSize="11sp"
-                android:textColor="?attr/colorSecondary"
+                android:layout_marginBottom="6dp"
                 android:letterSpacing="0.1"
-                android:layout_marginBottom="6dp"/>
+                android:text="EMAIL"
+                android:textColor="?attr/colorSecondary"
+                android:textSize="11sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_email"
                 style="@style/PurePath.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:hint="nama@email.com"
-                app:startIconDrawable="@drawable/ic_explore"
-                android:layout_marginBottom="16dp">
+                app:startIconDrawable="@drawable/ic_explore">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:textColor="?attr/colorOnSurface"/>
+                    android:textColor="?attr/colorOnSurface" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,26 +87,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginBottom="6dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="6dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:letterSpacing="0.1"
                     android:text="PASSWORD"
-                    android:textSize="11sp"
                     android:textColor="?attr/colorSecondary"
-                    android:letterSpacing="0.1"/>
+                    android:textSize="11sp" />
 
-                <TextView
-                    android:id="@+id/tv_lupa_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Lupa Password?"
-                    android:textSize="12sp"
-                    android:textColor="?attr/colorPrimary"/>
 
             </LinearLayout>
 
@@ -115,62 +108,52 @@
                 style="@style/PurePath.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
                 android:hint="••••••••"
-                app:startIconDrawable="@drawable/ic_bookmark"
                 app:endIconMode="password_toggle"
-                android:layout_marginBottom="12dp">
+                app:startIconDrawable="@drawable/ic_bookmark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:textColor="?attr/colorOnSurface"/>
+                    android:textColor="?attr/colorOnSurface" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Ingat Saya -->
-            <CheckBox
-                android:id="@+id/cb_remember"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ingat Saya"
-                android:textSize="13sp"
-                android:textColor="?attr/colorOnSurface"
-                android:buttonTint="?attr/colorPrimary"
-                android:layout_marginBottom="20dp"/>
 
             <!-- Tombol Masuk -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_login"
+                style="@style/PurePath.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Masuk →"
-                style="@style/PurePath.Button"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="16dp"
+                android:text="Masuk →" />
 
             <!-- Daftar -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Belum punya akun? "
-                    android:textSize="13sp"
-                    android:textColor="?attr/colorSecondary"/>
+                    android:textColor="?attr/colorSecondary"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/tv_go_register"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Daftar"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorPrimary"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
