@@ -109,14 +109,13 @@
                 android:padding="16dp"
                 android:gravity="center_vertical">
 
-                <TextView
+                <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:gravity="center"
-                    android:text="✦"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"
+                    android:src="@drawable/ic_diary"
+                    android:scaleType="centerInside"
                     android:background="@color/ocean"
+                    android:padding="6dp"
                     android:layout_marginEnd="12dp"/>
 
                 <LinearLayout

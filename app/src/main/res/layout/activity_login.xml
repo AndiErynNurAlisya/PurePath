@@ -16,26 +16,19 @@
         android:padding="32dp">
 
         <ImageView
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:src="@drawable/ic_explore"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:src="@drawable/logo"
             app:tint="@color/white"
             android:layout_marginBottom="16dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PurePath"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:layout_marginBottom="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Napas Lebih Bersih, Hidup Lebih Sehat"
-            android:textSize="14sp"
+            android:textStyle="italic"
+            android:text="Breath Smart. Stay Protected"
+            android:textSize="16sp"
             android:textColor="@color/sky"
             android:gravity="center"/>
 

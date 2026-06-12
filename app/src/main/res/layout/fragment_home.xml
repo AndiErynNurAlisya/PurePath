@@ -36,14 +36,13 @@
             android:textColor="?attr/colorOnSurface"
             android:layout_marginBottom="4dp"/>
 
-        <TextView
-            android:id="@+id/tv_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="📍- "
-            android:textSize="14sp"
-            android:textColor="?attr/colorSecondary"
-            android:layout_marginBottom="16dp"/>
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_location"
+            android:scaleType="centerInside"
+            android:padding="6dp"
+            android:layout_marginEnd="12dp"/>
 
         <!-- AQI Card -->
         <com.google.android.material.card.MaterialCardView
@@ -121,11 +120,13 @@
                     android:orientation="vertical"
                     android:padding="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="☀️"
-                        android:textSize="20sp"/>
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_sun"
+                        android:scaleType="centerInside"
+                        android:padding="6dp"
+                        android:layout_marginEnd="12dp"/>
 
                     <TextView
                         android:id="@+id/tv_temp"
@@ -159,11 +160,13 @@
                     android:orientation="vertical"
                     android:padding="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="💧"
-                        android:textSize="20sp"/>
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_lembab"
+                        android:scaleType="centerInside"
+                        android:padding="6dp"
+                        android:layout_marginEnd="12dp"/>
 
                     <TextView
                         android:id="@+id/tv_humidity"
@@ -207,11 +210,13 @@
                     android:orientation="vertical"
                     android:padding="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="💨"
-                        android:textSize="20sp"/>
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_wind"
+                        android:scaleType="centerInside"
+                        android:padding="6dp"
+                        android:layout_marginEnd="12dp"/>
 
                     <TextView
                         android:id="@+id/tv_wind"
@@ -244,11 +249,13 @@
                     android:orientation="vertical"
                     android:padding="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔆"
-                        android:textSize="20sp"/>
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_uv_index"
+                        android:scaleType="centerInside"
+                        android:padding="6dp"
+                        android:layout_marginEnd="12dp"/>
 
                     <TextView
                         android:id="@+id/tv_uv"
