@@ -24,6 +24,8 @@ import com.example.purepath.database.DiaryDao;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.tasks.CancellationTokenSource;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -46,10 +48,16 @@ public class HomeFragment extends Fragment {
     private BottomNavigationView bottomNav;
 
     // Koordinat default Makassar
-    private double lat = -5.1477;
-    private double lon = 119.4327;
+    // SESUDAH — mulai dari 0, hanya diisi kalau dapat lokasi asli
+    private double lat = 0;
+    private double lon = 0;
+
+    private boolean isRetrySnackbarShown = false;
+    private CancellationTokenSource cancellationSource = new CancellationTokenSource();
 
     private int currentAqi = 0;
+
+    private int currentIspu = 0;  // ISPU asli hasil perhitungan
     private double currentUv = 0;
 
     private FusedLocationProviderClient fusedLocationClient;
@@ -123,33 +131,84 @@ public class HomeFragment extends Fragment {
     private void getLocationAndFetch() {
         if (ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Pakai koordinat default Makassar
-            fetchAllData();
+            showLocationError("Izin lokasi diperlukan untuk menampilkan data area Anda.");
             return;
         }
 
-        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+        cancellationSource = new CancellationTokenSource();  // ◄ SATU-SATUNYA baris baru
+
+        isRetrySnackbarShown = false;  // reset agar Snackbar retry bisa muncul lagi
+
+        // Tampilkan status loading
+        tvLocation.setText("📍 Mencari lokasi Anda...");
+
+        // 1) Coba lokasi terakhir (cepat, dari cache)
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(location -> {
+                    if (location != null) {
+                        useLocation(location);
+                    } else {
+                        // 2) Cache kosong → minta lokasi fresh
+                        requestFreshLocation();
+                    }
+                })
+                .addOnFailureListener(e -> requestFreshLocation());
+    }
+
+    // Minta lokasi baru langsung dari GPS (lebih andal saat cache null)
+    private void requestFreshLocation() {
+        if (ActivityCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            showLocationError("Izin lokasi diperlukan untuk menampilkan data area Anda.");
+            return;
+        }
+
+        fusedLocationClient.getCurrentLocation(
+                Priority.PRIORITY_HIGH_ACCURACY,
+                cancellationSource.getToken()
+        ).addOnSuccessListener(location -> {
             if (location != null) {
-                lat = location.getLatitude();
-                lon = location.getLongitude();
+                useLocation(location);
+            } else {
+                // 3) Tetap null → jujur tampilkan error, JANGAN diam-diam pakai Makassar
+                showLocationError("Lokasi tidak ditemukan. Pastikan GPS aktif, lalu coba lagi.");
             }
-            // Fetch data dengan koordinat GPS atau default
-            fetchAllData();
-        }).addOnFailureListener(e -> {
-            // Pakai koordinat default
-            fetchAllData();
-        });
+        }).addOnFailureListener(e ->
+                showLocationError("Gagal mengambil lokasi. Periksa koneksi & GPS Anda."));
+    }
+
+    // Lokasi valid didapat → simpan koordinat & ambil data
+    private void useLocation(Location location) {
+        lat = location.getLatitude();
+        lon = location.getLongitude();
+        fetchAllData();
+    }
+
+
+    private void showLocationError(String message) {
+        if (!isAdded()) return;
+
+        tvLocation.setText("📍 Lokasi tidak tersedia");
+        tvAqiLabel.setText("—");
+        tvAqiValue.setText("--");
+        tvAqiDesc.setText(message);
+        tvWeatherDesc.setText("Data tidak tersedia");
+
+        // Tawarkan "Coba Lagi"
+        com.google.android.material.snackbar.Snackbar.make(
+                requireView(), message, com.google.android.material.snackbar.Snackbar.LENGTH_LONG
+        ).setAction("Coba Lagi", v -> requestLocationAndFetch()).show();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                            @NonNull int[] grantResults) {
+                                           @NonNull int[] grantResults) {
         if (requestCode == LOCATION_PERMISSION_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLocationAndFetch();
             } else {
-                // Permission ditolak, pakai koordinat default
-                fetchAllData();
+                // SEBELUM: fetchAllData();  ← diam-diam pakai Makassar
+                showLocationError("Izin lokasi ditolak. Aktifkan izin lokasi untuk melihat data area Anda.");
             }
         }
     }
@@ -158,6 +217,19 @@ public class HomeFragment extends Fragment {
         fetchWeatherData();
         fetchAirQuality();
         fetchUvIndex();
+    }
+
+    // Snackbar "Coba Lagi" tunggal saat data API gagal dimuat (mis. tidak ada koneksi)
+    private void showRetrySnackbar(String message) {
+        if (!isAdded() || isRetrySnackbarShown) return;
+        isRetrySnackbarShown = true;
+        com.google.android.material.snackbar.Snackbar.make(
+                requireView(), message,
+                com.google.android.material.snackbar.Snackbar.LENGTH_INDEFINITE
+        ).setAction("Coba Lagi", v -> {
+            isRetrySnackbarShown = false;
+            requestLocationAndFetch();
+        }).show();
     }
 
     private void fetchWeatherData() {
@@ -187,8 +259,10 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onFailure(@NonNull Call<WeatherResponse> call, @NonNull Throwable t) {
                     if (isAdded()) {
-                        getActivity().runOnUiThread(() ->
-                                tvWeatherDesc.setText("Gagal memuat data"));
+                        getActivity().runOnUiThread(() -> {
+                            tvWeatherDesc.setText("Gagal memuat data");
+                            showRetrySnackbar("Tidak ada koneksi. Periksa internet Anda.");
+                        });
                     }
                 }
             });
@@ -206,17 +280,14 @@ public class HomeFragment extends Fragment {
                         && !response.body().list.isEmpty() && isAdded()) {
 
                     AirPollutionResponse.AqiData data = response.body().list.get(0);
-                    currentAqi = data.main.aqi;
-                    int aqiDisplay = convertOwmAqi(currentAqi);
                     double pm25 = data.components.pm25;
-
+                    currentIspu = computeIspuFromPm25(pm25);   // ISPU asli dari PM2.5
+                    currentAqi = ispuToLevel(currentIspu);     // level 1-5 dari ISPU
                     getActivity().runOnUiThread(() -> {
-                        tvAqiValue.setText(String.valueOf(aqiDisplay));
+                        tvAqiValue.setText(String.valueOf(currentIspu));  // tampilkan ISPU asli
                         updateAqiUI(currentAqi, pm25);
                         updateBreathIndex(currentAqi);
                         updateRekomendasi(currentAqi, currentUv);
-
-                        // Simpan ke database setelah data AQI didapat
                         saveToDiary();
                     });
                 }
@@ -225,7 +296,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<AirPollutionResponse> call, @NonNull Throwable t) {
                 if (isAdded()) {
-                    getActivity().runOnUiThread(() -> tvAqiLabel.setText("Gagal memuat"));
+                    getActivity().runOnUiThread(() -> {
+                        tvAqiLabel.setText("Gagal memuat");
+                        showRetrySnackbar("Tidak ada koneksi. Periksa internet Anda.");
+                    });
                 }
             }
         });
@@ -254,7 +328,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<MeteoResponse> call, @NonNull Throwable t) {
                 if (isAdded()) {
-                    getActivity().runOnUiThread(() -> tvUv.setText("N/A"));
+                    getActivity().runOnUiThread(() -> {
+                        tvUv.setText("N/A");
+                        showRetrySnackbar("Tidak ada koneksi. Periksa internet Anda.");
+                    });
                 }
             }
         });
@@ -272,58 +349,80 @@ public class HomeFragment extends Fragment {
         String desc = getAqiDesc(currentAqi);
 
         DiaryDao dao = new DiaryDao(requireContext());
-        dao.insertOrUpdate(today, convertOwmAqi(currentAqi), aqiLabel, desc, 0, currentUv);
+        dao.insertOrUpdate(today, currentIspu, aqiLabel, desc, 0, currentUv);
     }
 
-    private int convertOwmAqi(int owmAqi) {
-        switch (owmAqi) {
-            case 1: return 25;
-            case 2: return 75;
-            case 3: return 125;
-            case 4: return 175;
-            case 5: return 250;
-            default: return 0;
-        }
+
+    /**
+     * Hitung ISPU dari konsentrasi PM2.5 (µg/m³) sesuai formula resmi KLHK:
+     * I = ((Ia - Ib) / (Xa - Xb)) * (Xx - Xb) + Ib
+     */
+    private int computeIspuFromPm25(double c) {
+        double xb, xa;
+        int ib, ia;
+        if (c <= 15.5)       { xb = 0;     xa = 15.5;  ib = 0;   ia = 50;  }
+        else if (c <= 55.4)  { xb = 15.5;  xa = 55.4;  ib = 50;  ia = 100; }
+        else if (c <= 150.4) { xb = 55.4;  xa = 150.4; ib = 100; ia = 200; }
+        else if (c <= 250.4) { xb = 150.4; xa = 250.4; ib = 200; ia = 300; }
+        else if (c <= 500.0) { xb = 250.4; xa = 500.0; ib = 300; ia = 500; }
+        else return 500; // di luar skala maksimum
+        double ispu = ((ia - ib) / (xa - xb)) * (c - xb) + ib;
+        return (int) Math.round(ispu);
     }
 
-    private String getAqiLabel(int owmAqi) {
-        switch (owmAqi) {
+    /** Konversi nilai ISPU → level kategori 1–5 (untuk breath index & rekomendasi). */
+    private int ispuToLevel(int ispu) {
+        if (ispu <= 50) return 1;
+        else if (ispu <= 100) return 2;
+        else if (ispu <= 200) return 3;
+        else if (ispu <= 300) return 4;
+        else return 5;
+    }
+
+
+    private String getAqiLabel(int level) {
+        switch (level) {
             case 1: return "BAIK";
             case 2: return "SEDANG";
             case 3: return "TIDAK SEHAT";
-            case 4: return "BURUK";
+            case 4: return "SANGAT TIDAK SEHAT";  // ◄ diperbaiki (dulu "BURUK")
             default: return "BERBAHAYA";
         }
     }
 
-    private String getAqiDesc(int owmAqi) {
-        switch (owmAqi) {
-            case 1: return "Udara Segar Sepanjang Hari";
-            case 2: return "Kualitas Udara Cukup Baik";
-            case 3: return "Sensitif Terhadap Polusi";
-            case 4: return "Polusi Tinggi Hari Ini";
-            default: return "Kondisi Udara Berbahaya";
+    private String getAqiDesc(int level) {
+        switch (level) {
+            case 1: return "Tingkat mutu udara sangat baik";
+            case 2: return "Kualitas udara masih dapat diterima";
+            case 3: return "Bersifat merugikan bagi kelompok sensitif";
+            case 4: return "Meningkatkan risiko kesehatan pada populasi terpapar";
+            default: return "Berbahaya bagi kesehatan, perlu penanganan cepat";
         }
     }
 
-    private void updateAqiUI(int owmAqi, double pm25) {
+    private void updateAqiUI(int level, double pm25) {
         String label, desc;
         int color;
-        switch (owmAqi) {
+        switch (level) {
             case 1:
-                label = "Baik"; desc = "Udara sangat bersih. Sempurna untuk aktivitas luar ruangan.";
+                label = "Baik";
+                desc = "Udara sangat bersih. Sempurna untuk aktivitas luar ruangan.";
                 color = getResources().getColor(R.color.aqi_good, null); break;
             case 2:
-                label = "Sedang"; desc = "Kualitas udara dapat diterima. Aktivitas luar ruangan masih aman.";
+                label = "Sedang";
+                desc = "Kualitas udara masih dapat diterima untuk aktivitas luar.";
                 color = getResources().getColor(R.color.aqi_moderate, null); break;
             case 3:
-                label = "Tidak Sehat (Sensitif)"; desc = "Kelompok sensitif perlu berhati-hati di luar ruangan.";
+                label = "Tidak Sehat";
+                desc = "Merugikan bagi kelompok sensitif. Batasi aktivitas luar.";
                 color = getResources().getColor(R.color.aqi_sensitive, null); break;
             case 4:
-                label = "Tidak Sehat"; desc = "Semua orang mulai merasakan dampak. Kurangi aktivitas luar.";
+                label = "Sangat Tidak Sehat";
+                desc = "Meningkatkan risiko kesehatan. Hindari aktivitas luar ruangan.";
                 color = getResources().getColor(R.color.aqi_unhealthy, null); break;
             default:
-                label = "Berbahaya"; desc = "Kondisi darurat kesehatan. Hindari semua aktivitas luar ruangan.";
+                label = "Berbahaya";
+                desc = "Kondisi darurat kesehatan. Tetap di dalam ruangan.";
                 color = getResources().getColor(R.color.aqi_hazardous, null);
         }
         tvAqiLabel.setText(label);
@@ -355,7 +454,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void updateRekomendasi(int aqi, double uv) {
+    private void updateRekomendasi(int level, double uv) {
         if (tvRekoTitle == null) return;
 
         boolean hasAsma = prefs.getBoolean("health_asma", false);
@@ -367,48 +466,87 @@ public class HomeFragment extends Fragment {
         boolean anyCondition = hasAsma || hasIspa || hasLupus ||
                 hasEksim || hasRosacea || hasHerpes;
 
+        // ============================================================
+        // KONDISI NORMAL (tanpa penyakit) — cek POLUSI + UV
+        // ============================================================
         if (!anyCondition) {
-            if (aqi <= 1) {
-                tvRekoTitle.setText("Udara Bersih Hari Ini");
-                tvRekoDesc.setText("Kualitas udara sangat baik. Aman untuk semua aktivitas.");
-            } else if (aqi <= 2) {
-                tvRekoTitle.setText("Udara Cukup Baik");
-                tvRekoDesc.setText("Aktivitas luar ruangan tetap aman hari ini.");
+            List<String> umum = new ArrayList<>();
+
+            // -- Polusi udara --
+            if (level == 3) {
+                umum.add("🫁 Udara tidak sehat. Kurangi aktivitas luar ruangan yang berat.");
+            } else if (level == 4) {
+                umum.add("🫁 Udara sangat tidak sehat. Hindari aktivitas luar ruangan.");
+            } else if (level >= 5) {
+                umum.add("🫁 Udara berbahaya. Tetap di dalam ruangan & tutup ventilasi.");
+            }
+
+            // -- Sinar UV --
+            if (uv >= 8) {
+                umum.add("☀️ UV " + (int) uv + " sangat tinggi. Gunakan sunscreen SPF 30+ & hindari paparan tengah hari (10.00–16.00).");
+            } else if (uv >= 6) {
+                umum.add("☀️ UV " + (int) uv + " tinggi. Gunakan sunscreen saat beraktivitas di luar.");
+            }
+
+            if (umum.isEmpty()) {
+                if (level <= 1 && uv < 3) {
+                    tvRekoTitle.setText("Kondisi Sangat Baik");
+                    tvRekoDesc.setText("Kualitas udara bersih dan UV rendah. Aman untuk semua aktivitas.");
+                } else {
+                    tvRekoTitle.setText("Kondisi Baik");
+                    tvRekoDesc.setText("Udara dan UV dalam batas aman. Aktivitas luar ruangan tetap nyaman.");
+                }
             } else {
-                tvRekoTitle.setText("Waspada Kualitas Udara");
-                tvRekoDesc.setText("Pertimbangkan mengurangi aktivitas luar ruangan.");
+                tvRekoTitle.setText(umum.size() > 1 ?
+                        "⚠️ " + umum.size() + " Peringatan Hari Ini" : "Perhatian Hari Ini");
+                tvRekoDesc.setText(String.join("\n\n", umum));
             }
             return;
         }
 
-        // Kumpulkan SEMUA peringatan sekaligus (fix komorbid)
+        // ============================================================
+        // ADA PENYAKIT — kelompokkan peringatan per FAKTOR
+        // ============================================================
         List<String> warnings = new ArrayList<>();
 
-        // Cek AQI untuk penyakit pernapasan
-        if ((hasAsma || hasIspa) && aqi >= 3) {
-            warnings.add("⚠️ AQI tinggi berbahaya untuk pernapasan Anda. Gunakan masker N95.");
-        } else if ((hasAsma || hasIspa) && aqi >= 2) {
-            warnings.add("⚡ Kualitas udara sedang. Batasi aktivitas luar ruangan yang berat.");
-        }
+        // ---- FAKTOR 1: POLUSI UDARA (Asma, ISPA, Eksim) ----
+        List<String> polusiDiseases = new ArrayList<>();
+        if (hasAsma) polusiDiseases.add("Asma");
+        if (hasIspa) polusiDiseases.add("ISPA");
+        if (hasEksim) polusiDiseases.add("Eksim");
 
-        // Cek UV untuk penyakit kulit/autoimun
-        if ((hasLupus || hasRosacea || hasHerpes) && uv >= 6) {
-            warnings.add("⚠️ UV " + (int)uv + " berbahaya. Gunakan sunscreen SPF 50+ dan pakaian pelindung.");
-        } else if ((hasLupus || hasRosacea || hasHerpes) && uv >= 3) {
-            warnings.add("☀️ UV sedang. Disarankan memakai sunscreen SPF 30+.");
-        }
-
-        // Cek keduanya untuk Eksim
-        if (hasEksim) {
-            if (aqi >= 3 && uv >= 6) {
-                warnings.add("⚠️ Polusi + UV tinggi berbahaya untuk eksim. Jaga kelembaban kulit.");
-            } else if (aqi >= 3) {
-                warnings.add("⚡ Polusi tinggi dapat memperburuk eksim Anda.");
-            } else if (uv >= 6) {
-                warnings.add("☀️ UV tinggi dapat memperburuk eksim. Hindari paparan langsung.");
+        if (!polusiDiseases.isEmpty()) {
+            String who = String.join(", ", polusiDiseases);
+            if (level >= 4) {
+                warnings.add("🫁 " + who + ": Udara sangat berbahaya. Tetap di dalam ruangan & siapkan obat/inhaler.");
+            } else if (level == 3) {
+                warnings.add("🫁 " + who + ": Udara tidak sehat. Gunakan masker N95 & batasi aktivitas luar.");
+            } else if (level == 2) {
+                warnings.add("🫁 " + who + ": Kualitas udara sedang. Batasi aktivitas berat di luar ruangan.");
             }
         }
 
+        // ---- FAKTOR 2: SINAR UV (Lupus, Rosacea, Herpes, Eksim) ----
+        List<String> uvDiseases = new ArrayList<>();
+        if (hasLupus) uvDiseases.add("Lupus");
+        if (hasRosacea) uvDiseases.add("Rosacea");
+        if (hasHerpes) uvDiseases.add("Herpes");
+        if (hasEksim) uvDiseases.add("Eksim");
+
+        if (!uvDiseases.isEmpty()) {
+            String who = String.join(", ", uvDiseases);
+            if (uv >= 8) {
+                warnings.add("☀️ " + who + ": UV " + (int) uv + " sangat tinggi. Hindari matahari, pakai SPF 50+ & pakaian tertutup.");
+            } else if (uv >= 6) {
+                warnings.add("☀️ " + who + ": UV " + (int) uv + " tinggi. Gunakan sunscreen SPF 50+ & pakaian pelindung.");
+            } else if (uv >= 3) {
+                warnings.add("☀️ " + who + ": UV sedang. Disarankan memakai sunscreen SPF 30+.");
+            }
+        }
+
+        // ============================================================
+        // PENAMPILAN AKHIR
+        // ============================================================
         if (warnings.isEmpty()) {
             tvRekoTitle.setText("✅ Kondisi Relatif Aman");
             tvRekoDesc.setText("Kualitas udara dan UV index dalam batas aman untuk kondisi Anda.");
@@ -422,5 +560,11 @@ public class HomeFragment extends Fragment {
     private String capitalize(String str) {
         if (str == null || str.isEmpty()) return str;
         return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        cancellationSource.cancel();
     }
 }
