@@ -91,10 +91,10 @@ Kategori:
 ### 🪄 Langkah Setup
 1. 📥 **Clone** repositori ini:
    ```bash
-   git clone <url-repo-anda>
+   git clone https://github.com/AndiErynNurAlisya/PurePath.git
    ```
 2. 📂 Buka folder proyek di **Android Studio**.
-3. 🔑 **Konfigurasi API Key** — buat/lengkapi file `local.properties` di root proyek (file ini **tidak** di-commit ke Git). Tambahkan:
+3. 🔑 **Konfigurasi API Key** — buat/lengkapi file `local.properties` di root proyek. Tambahkan:
    ```properties
    sdk.dir=/path/ke/Android/Sdk
    OWM_API_KEY=API_KEY_OPENWEATHERMAP_ANDA
