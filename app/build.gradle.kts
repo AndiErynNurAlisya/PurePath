@@ -1,5 +1,16 @@
+// ▼ TAMBAHAN: import untuk membaca local.properties (taruh paling atas file)
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
+}
+
+// ▼ TAMBAHAN: load isi local.properties
+val localProps = Properties()
+val localFile = rootProject.file("local.properties")
+if (localFile.exists()) {
+    localProps.load(FileInputStream(localFile))
 }
 
 android {
@@ -14,6 +25,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // ▼ TAMBAHAN: tanam API key ke BuildConfig
+        buildConfigField("String", "OWM_API_KEY", "\"${localProps.getProperty("OWM_API_KEY", "")}\"")
+        buildConfigField("String", "NEWS_API_KEY", "\"${localProps.getProperty("NEWS_API_KEY", "")}\"")
+    }
+
+    // ▼ TAMBAHAN: aktifkan fitur BuildConfig (wajib di AGP baru)
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
