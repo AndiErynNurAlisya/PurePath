@@ -18,46 +18,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="📍"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="PurePath"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="?attr/colorPrimary"
             android:layout_marginStart="4dp"/>
-
-    </LinearLayout>
-
-    <!-- Progress Bar -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="24dp">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="4dp"
-            android:layout_weight="1"
-            android:background="@color/ocean"
-            android:layout_marginEnd="4dp"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="4dp"
-            android:layout_weight="1"
-            android:background="@color/sky"
-            android:layout_marginEnd="4dp"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="4dp"
-            android:layout_weight="1"
-            android:background="@color/sky"/>
 
     </LinearLayout>
 
@@ -104,12 +69,12 @@
                     android:padding="16dp"
                     android:gravity="center_vertical">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:gravity="center"
-                        android:text="💨"
-                        android:textSize="20sp"
+                        android:src="@drawable/ic_asma"
+                        android:scaleType="centerInside"
+                        android:padding="6dp"
                         android:background="@color/ice"
                         android:layout_marginEnd="12dp"/>
 
@@ -160,12 +125,12 @@
                     android:padding="16dp"
                     android:gravity="center_vertical">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:gravity="center"
-                        android:text="🫁"
-                        android:textSize="20sp"
+                        android:src="@drawable/ic_ispa"
+                        android:scaleType="centerInside"
+                        android:padding="6dp"
                         android:background="@color/ice"
                         android:layout_marginEnd="12dp"/>
 
@@ -216,12 +181,12 @@
                     android:padding="16dp"
                     android:gravity="center_vertical">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:gravity="center"
-                        android:text="🔆"
-                        android:textSize="20sp"
+                        android:src="@drawable/ic_lupus"
+                        android:scaleType="centerInside"
+                        android:padding="6dp"
                         android:background="@color/ice"
                         android:layout_marginEnd="12dp"/>
 
@@ -272,12 +237,12 @@
                     android:padding="16dp"
                     android:gravity="center_vertical">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:gravity="center"
-                        android:text="🧴"
-                        android:textSize="20sp"
+                        android:src="@drawable/ic_eksim"
+                        android:scaleType="centerInside"
+                        android:padding="6dp"
                         android:background="@color/ice"
                         android:layout_marginEnd="12dp"/>
 
@@ -328,12 +293,12 @@
                     android:padding="16dp"
                     android:gravity="center_vertical">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:gravity="center"
-                        android:text="🌡️"
-                        android:textSize="20sp"
+                        android:src="@drawable/ic_rosacea"
+                        android:scaleType="centerInside"
+                        android:padding="6dp"
                         android:background="@color/ice"
                         android:layout_marginEnd="12dp"/>
 
@@ -384,12 +349,12 @@
                     android:padding="16dp"
                     android:gravity="center_vertical">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:gravity="center"
-                        android:text="🦠"
-                        android:textSize="20sp"
+                        android:src="@drawable/ic_herpes"
+                        android:scaleType="centerInside"
+                        android:padding="6dp"
                         android:background="@color/ice"
                         android:layout_marginEnd="12dp"/>
 
@@ -440,12 +405,12 @@
                     android:padding="16dp"
                     android:gravity="center_vertical">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:gravity="center"
-                        android:text="✅"
-                        android:textSize="20sp"
+                        android:src="@drawable/ic_sehat"
+                        android:scaleType="centerInside"
+                        android:padding="6dp"
                         android:background="@color/ice"
                         android:layout_marginEnd="12dp"/>
 
@@ -489,7 +454,7 @@
         android:id="@+id/btn_lanjut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Lanjut →"
+        android:text="Lanjut"
         style="@style/PurePath.Button"
         android:layout_marginTop="16dp"/>
 

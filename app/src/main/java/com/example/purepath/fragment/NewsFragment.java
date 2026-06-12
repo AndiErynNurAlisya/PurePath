@@ -28,7 +28,10 @@ public class NewsFragment extends Fragment {
     private NewsAdapter adapter;
     private SwipeRefreshLayout swipeRefresh;
     private List<NewsArticle> articleList = new ArrayList<>();
-    private String currentQuery = "air pollution OR smog OR AQI OR \"air quality\" Indonesia";
+    private static final String QUERY_ALL =
+            "air pollution OR air quality OR environment OR climate Indonesia";
+    private String currentQuery = QUERY_ALL;
+
 
     @Nullable
     @Override
@@ -56,32 +59,23 @@ public class NewsFragment extends Fragment {
     }
 
     private void setupChips(View view) {
-        com.google.android.material.chip.Chip chipAll =
-                view.findViewById(R.id.chip_all);
-        com.google.android.material.chip.Chip chipPollution =
-                view.findViewById(R.id.chip_pollution);
-        com.google.android.material.chip.Chip chipAir =
-                view.findViewById(R.id.chip_air);
-        com.google.android.material.chip.Chip chipClimate =
-                view.findViewById(R.id.chip_climate);
+        com.google.android.material.chip.ChipGroup chipGroup =
+                view.findViewById(R.id.chip_group_news);
 
-        chipAll.setOnClickListener(v -> {
-            currentQuery = "polusi udara OR kualitas udara OR lingkungan hidup OR KLHK";
-            fetchNews(currentQuery);
-        });
-
-        chipPollution.setOnClickListener(v -> {
-            currentQuery = "polusi udara Jakarta smog PM2.5 asap";
-            fetchNews(currentQuery);
-        });
-
-        chipAir.setOnClickListener(v -> {
-            currentQuery = "ISPU kualitas udara AQI Indonesia";
-            fetchNews(currentQuery);
-        });
-
-        chipClimate.setOnClickListener(v -> {
-            currentQuery = "perubahan iklim emisi karbon deforestasi Indonesia";
+        chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            if (checkedIds.isEmpty()) {
+                // Tidak ada chip dipilih → tampilkan SEMUA berita
+                currentQuery = QUERY_ALL;
+            } else {
+                int checkedId = checkedIds.get(0);
+                if (checkedId == R.id.chip_pollution) {
+                    currentQuery = "smog OR haze OR \"air pollution\" OR emission Indonesia";
+                } else if (checkedId == R.id.chip_climate) {
+                    currentQuery = "climate change OR carbon emission OR deforestation Indonesia";
+                } else if (checkedId == R.id.chip_weather) {
+                    currentQuery = "weather forecast OR rainfall OR monsoon OR storm Indonesia";
+                }
+            }
             fetchNews(currentQuery);
         });
     }

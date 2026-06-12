@@ -136,15 +136,26 @@ public class DiaryFragment extends Fragment {
         List<DiaryEntry> last7 = dao.getLast7Entries();
         if (last7.isEmpty()) return;
 
-        int goodDays = 0, badDays = 0;
+        int goodDays = 0, moderateDays = 0, badDays = 0;
         for (DiaryEntry entry : last7) {
             if (entry.getAqi() <= 50) goodDays++;
-            else if (entry.getAqi() > 100) badDays++;
+            else if (entry.getAqi() <= 100) moderateDays++;
+            else badDays++;
         }
 
-        tvInsight.setText("Minggu ini kamu terpapar udara bersih " + goodDays +
-                " hari, udara buruk " + badDays + " hari. " +
-                (badDays == 0 ? "Kerja bagus menjaga kesehatan paru-parumu!" :
-                        "Pertimbangkan menggunakan masker di hari berikutnya."));
+        String saran;
+        if (badDays == 0 && moderateDays == 0) {
+            saran = "Kerja bagus menjaga kesehatan paru-parumu!";
+        } else if (badDays > goodDays) {
+            saran = "Minggu ini lebih banyak udara buruk. Kurangi aktivitas luar ruangan "
+                    + "dan gunakan masker saat keluar.";
+        } else if (badDays > 0) {
+            saran = "Masih ada beberapa hari berudara buruk. Tetap waspada dan siapkan masker.";
+        } else {
+            saran = "Kualitasnya cukup terjaga. Pertahankan kebiasaan baikmu!";
+        }
+
+        tvInsight.setText("Minggu ini kamu terpapar udara bersih " + goodDays
+                + " hari, sedang " + moderateDays + " hari, buruk " + badDays + " hari. " + saran);
     }
 }

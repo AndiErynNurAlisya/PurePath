@@ -273,7 +273,7 @@ public class ExploreFragment extends Fragment {
                 savedLocations.add(new Location(
                         parts[0], parts[1],
                         Integer.parseInt(parts[2]),
-                        parts[3], false,
+                        parts[3], true,
                         Double.parseDouble(parts[4]),
                         Double.parseDouble(parts[5])
                 ));

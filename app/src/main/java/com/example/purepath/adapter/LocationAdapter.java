@@ -64,9 +64,14 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         holder.tvAqiValue.setTextColor(color);
 
         // Bookmark
-        holder.ivBookmark.setImageResource(
-                location.isBookmarked() ? R.drawable.ic_bookmark : R.drawable.ic_bookmark
-        );
+        if (location.isBookmarked()) {
+            holder.ivBookmark.setImageResource(R.drawable.ic_bookmark_filled);
+            holder.ivBookmark.setColorFilter(
+                    context.getResources().getColor(R.color.ocean, null));
+        } else {
+            holder.ivBookmark.setImageResource(R.drawable.ic_bookmark);
+            holder.ivBookmark.clearColorFilter();
+        }
 
         holder.itemView.setOnClickListener(v -> listener.onItemClick(location));
         holder.ivBookmark.setOnClickListener(v -> listener.onBookmarkClick(location, position));
