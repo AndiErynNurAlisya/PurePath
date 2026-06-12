@@ -13,7 +13,7 @@ PurePath adalah aplikasi Android yang menyajikan **informasi kualitas lingkungan
 - **Beranda (Home)** — Menampilkan lokasi pengguna, cuaca real-time, kualitas udara (ISPU), indeks UV, indeks pernapasan, dan rekomendasi kesehatan harian.
 - **Kualitas Udara (ISPU)** — Menghitung **Indeks Standar Pencemar Udara (ISPU)** dari konsentrasi PM2.5 sesuai formula resmi **KLHK** (Kementerian Lingkungan Hidup & Kehutanan).
 - **Rekomendasi Kesehatan Personal** — Rekomendasi disesuaikan dengan riwayat penyakit pengguna (Asma, ISPA, Lupus, Eksim, Rosacea, Herpes) terhadap faktor **polusi udara** dan **paparan sinar UV**.
-- **Berita (News)** — Daftar berita terkini dari NewsAPI dengan fitur **pencarian** dan **swipe-to-refresh**. Detail berita dibuka di dalam aplikasi via WebView.
+- **Berita (News)** — Daftar berita terkini dari NewsAPI dengan **filter kategori** (Polusi / Iklim / Cuaca) dan **swipe-to-refresh**. Detail berita dibuka di dalam aplikasi via WebView.
 - **Eksplor (Explore)** — Daftar lokasi/tempat yang dapat ditandai.
 - **Diary** — Riwayat harian kualitas udara & UV pengguna, tersimpan secara lokal (offline).
 - **Pengaturan (Settings)** — Profil pengguna, pilihan kondisi kesehatan, dan **mode gelap/terang (Dark/Light Mode)**.
@@ -32,7 +32,7 @@ Aplikasi memenuhi spesifikasi teknis berikut:
 | **Fragment + Navigation** | 7 Fragment (`Home`, `Explore`, `News`, `Diary`, `Settings`, `DetailLocation`, `DetailPlan`) dengan **Navigation Component** + **BottomNavigationView** |
 | **RecyclerView** | `NewsAdapter` (berita), `LocationAdapter` (eksplor), `DiaryAdapter` (riwayat) |
 | **Background Thread** | `ExecutorService` (`Executors.newSingleThreadExecutor`) + callback async **Retrofit** untuk pemanggilan jaringan |
-| **Networking** | **Retrofit** + penanganan kegagalan: **swipe-to-refresh** (News) & **Snackbar "Coba Lagi"** (Home) saat koneksi terputus |
+| **Networking** | **Retrofit** + penanganan kegagalan: **swipe-to-refresh** (News) & **Snackbar "Coba Lagi"** (Home) saat koneksi terputus. Berita dapat difilter per kategori (Polusi / Iklim / Cuaca) |
 | **Penyimpanan Lokal** | **SQLite** (`DatabaseHelper`, `DiaryDao`) untuk Diary + **SharedPreferences** untuk profil, kondisi kesehatan, & preferensi tema |
 | **Tampilan Offline** | Data Diary tetap tampil tanpa koneksi internet |
 | **Tema Gelap/Terang** | `AppCompatDelegate.setDefaultNightMode` + `res/values-night/themes.xml`, preferensi tersimpan & diterapkan saat startup |
@@ -62,7 +62,7 @@ Kategori: **Baik (1–50)**, **Sedang (51–100)**, **Tidak Sehat (101–200)**,
 
 ### Prasyarat
 - Android Studio (versi terbaru)
-- JDK 17
+- JDK 11
 - Android SDK (compileSdk 36)
 - Perangkat/emulator Android (minSdk 24 / Android 7.0+)
 
